@@ -11,6 +11,7 @@ import { CardDetails } from "./pages/cardDetails";
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
+import { JumbotronNavBar } from "./component/jumbotronNavBar";
 import { Footer } from "./component/footer";
 
 const Layout = () => {
@@ -25,7 +26,10 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <ScrollToTop>
-          <Navbar />
+          <div className="fixed-top">
+            <Navbar />
+            <JumbotronNavBar />
+          </div>
           <Routes>
             <Route element={<Home />} path="/" />
             <Route element={<Favorites />} path="/favorites" />

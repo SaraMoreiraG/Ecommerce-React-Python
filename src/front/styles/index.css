@@ -1,3 +1,20 @@
-/* 
-    General Styles used on every website (Don't Repeat Yourself)
-*/
+nav .btn {
+  display: flex;
+  align-items: center;
+}
+nav .btn i {
+  font-size: 20px;
+  margin-right: 10px;
+}
+nav h5 {
+  font-size: 12px;
+  margin: 0;
+}
+a:-webkit-any-link {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+.jumbotron-nav-bar {
+  background-color: #000;
+}

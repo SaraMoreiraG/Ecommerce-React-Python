@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
+import { Link } from "react-router-dom";
 
 import { Card } from "../component/card.js";
 import { Collection } from "../component/collection.js";
@@ -10,16 +11,13 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="container banner-home p-3 bg-danger">
-        <div className="col-4">Text1</div>
-        <div className="col-4">Text1</div>
-        <div className="col-4">Text1</div>
-      </div>
       <div className="jumbotron-home ps-5 bg-primary">
         <div className="text-center">
           <h1>title</h1>
           <p>some text</p>
-          <button>Search keyword</button>
+          <Link to={"/search/" + "allproducts"} className="btn btn-light">
+            <span>Link to: all products</span>
+          </Link>
         </div>
       </div>
       <div className="container collections p-3 bg-success">
@@ -27,14 +25,18 @@ export const Home = () => {
         <Collection />
         <Collection />
       </div>
-      <div className="container card-display p-3 bg-warning">
-        <h2>Text</h2>
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+      <div className="container p-3 bg-warning">
+        <div className="row">
+          <h1>Some text</h1>
+        </div>
+        <div className="row justify-content-between bg-danger">
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </div>
       </div>
     </div>
   );

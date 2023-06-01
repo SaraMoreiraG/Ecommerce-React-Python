@@ -2,10 +2,7 @@
   text-align: center;
   justify-content: center;
 }
-.banner-home {
-  display: flex;
-  justify-content: center;
-}
+
 .banner-home .col-4 {
   border: 10px, solid, red;
 }

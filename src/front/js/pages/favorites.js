@@ -6,8 +6,10 @@ export const Favorites = () => {
   const { store, actions } = useContext(Context);
 
   return (
-    <div className="jumbotron">
-      <h1 className="display-4">This is a favorites page</h1>
-    </div>
+    <>
+      <div className="jumbotron mt-5 pt-5">
+        <h1 className="display-4">This is a favorites page</h1>
+      </div>
+    </>
   );
 };
