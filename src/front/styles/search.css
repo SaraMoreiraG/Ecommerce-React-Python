@@ -1,0 +1,16 @@
+.banner-search {
+  background-color: greenyellow;
+  height: 400px;
+}
+.pagination {
+  background-color: orange;
+  scroll-behavior: auto;
+}
+.search-bar {
+  background-color: red;
+  height: 600px;
+}
+.halo {
+  height: 100%;
+  width: 100%;
+}
