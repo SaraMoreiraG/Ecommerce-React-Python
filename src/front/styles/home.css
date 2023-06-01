@@ -1,7 +1,23 @@
-/*
-    home.css: This website contains selectors only used in home.css
-
-    All pages share the styles on index.css but you should create 
-    one more css for each page that will contain the selected used 
-    on that page only (the ones not reused in other pages).
-*/
+.container {
+  text-align: center;
+  justify-content: center;
+}
+.banner-home {
+  display: flex;
+  justify-content: center;
+}
+.banner-home .col-4 {
+  border: 10px, solid, red;
+}
+.jumbotron-home {
+  height: 400px;
+  text-align: justify;
+  display: flex;
+  align-items: center;
+}
+.collections {
+  display: flex;
+}
+/* .card-display {
+  display: flex;
+} */
