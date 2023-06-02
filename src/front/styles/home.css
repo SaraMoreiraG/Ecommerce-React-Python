@@ -1,19 +1,26 @@
 .container {
+  display: flex;
   text-align: center;
-  justify-content: center;
+  padding: 0;
 }
 
 .banner-home .col-4 {
   border: 10px, solid, red;
 }
 .jumbotron-home {
-  height: 400px;
+  background-image: url("https://new-ella-demo.myshopify.com/cdn/shop/files/slideshow-1.jpg?v=1632195167&width=1880");
+
+  width: auto;
+  height: 600px;
   text-align: justify;
   display: flex;
   align-items: center;
 }
 .collections {
   display: flex;
+}
+.card {
+  width: 20%;
 }
 /* .card-display {
   display: flex;

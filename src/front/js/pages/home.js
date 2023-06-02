@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 
 import { Card } from "../component/card.js";
-import { Collection } from "../component/collection.js";
+import { Collections } from "../component/collections.js";
 import "../../styles/home.css";
 
 export const Home = () => {
@@ -11,25 +11,26 @@ export const Home = () => {
 
   return (
     <div>
-      <div className="jumbotron-home ps-5 bg-primary">
-        <div className="text-center">
-          <h1>title</h1>
-          <p>some text</p>
-          <Link to={"/search/" + "allproducts"} className="btn btn-light">
+      <div className="jumbotron-home ps-5">
+        <div className="text-center col-4 m-5 p-5">
+          <h1>Lorem ipsum</h1>
+          <p>
+            dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore.
+          </p>
+          <Link to={"/search/" + "allproducts"} className="btn btn-dark">
             <span>Link to: all products</span>
           </Link>
         </div>
       </div>
-      <div className="container collections p-3 bg-success">
-        <Collection />
-        <Collection />
-        <Collection />
-      </div>
-      <div className="container p-3 bg-warning">
+
+      <Collections />
+
+      <div className="container d-grid p-3">
         <div className="row">
-          <h1>Some text</h1>
+          <h1>---------- Our offers -----------</h1>
         </div>
-        <div className="row justify-content-between bg-danger">
+        <div className="row pt-4 justify-content-between">
           <Card />
           <Card />
           <Card />
