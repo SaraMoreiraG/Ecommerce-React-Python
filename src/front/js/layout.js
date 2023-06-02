@@ -26,10 +26,8 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <ScrollToTop>
-          <div className="fixed-top">
-            <Navbar />
-            <JumbotronNavBar />
-          </div>
+          <Navbar />
+          <JumbotronNavBar />
           <Routes>
             <Route element={<Home />} path="/" />
             <Route element={<Favorites />} path="/favorites" />

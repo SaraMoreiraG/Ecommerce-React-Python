@@ -11,21 +11,20 @@ export const Search = (props) => {
   const params = useParams();
 
   return (
-    <div className="container d-flex g-4 bg-primary justify-content-end">
-      <div className="halo d-flex bg-warning">
-        <div className="search-bar col-3">Search bar</div>
-        <div className="col-9">
-          <div className="banner-search col-12">Banner</div>
-          <h1 className="display-4 col-12">
-            This will show the collection: {params.theid}
-          </h1>
-          <div className="pagination d-flex">
-            <Card />
-            <div className="card col-3">Cards</div>
-            <div className="card col-3">Cards</div>
-            <div className="card col-3">Cards</div>
-            <div className="card col-3">Cards</div>
-          </div>
+    <div className="container bg-primary">
+      <div className="search-bar col-3">Search bar</div>
+      <div className="col-9 bg-warning">
+        <div className="banner-search d-grid justify-content-end">
+          <img src="https://new-ella-demo.myshopify.com/cdn/shop/collections/category-default-1.jpg?v=1646985103&width=1100" />
+        </div>
+        <h1 className="col-12 text-start py-3">{params.theid} collection</h1>
+        <div className="row pt-4 justify-content-between">
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
         </div>
       </div>
     </div>
