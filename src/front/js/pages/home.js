@@ -26,9 +26,11 @@ export const Home = () => {
 
       <Collections />
 
-      <div className="container d-grid p-3">
-        <div className="row">
-          <h1>---------- Our offers -----------</h1>
+      <div className="container d-grid pt-5 ">
+        <div className="row text-center">
+          <h2>
+            <span>OUR OFFERS</span>
+          </h2>
         </div>
         <div className="row pt-4 justify-content-between">
           <Card />
