@@ -1,0 +1,36 @@
+h1 {
+  font-size: 22px;
+  margin: 0;
+}
+h2 {
+  font-size: 20px;
+}
+h3 {
+  font-size: 14px;
+  font-weight: 400;
+}
+h4 {
+  font-size: 12px;
+  margin: 0px;
+  padding-left: 8px;
+}
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #cfcfcf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0;
+  cursor: pointer;
+}
+.circle.active {
+  border-color: #000;
+}
+.circle-color {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+}

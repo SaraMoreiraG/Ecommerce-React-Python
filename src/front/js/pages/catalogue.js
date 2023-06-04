@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 import { Card } from "../component/card";
-import "../../styles/search.css";
+import "../../styles/catalogue.css";
 
-export const Search = (props) => {
+export const Catalogue = (props) => {
   const { store, actions } = useContext(Context);
   const params = useParams();
 
@@ -19,7 +19,7 @@ export const Search = (props) => {
   };
 
   return (
-    <div className="container search-main">
+    <div className="catalogue container">
       <div className="row m-0">
         <div className="link-tree pt-4 ms-2">
           <p>home - collection</p>
@@ -173,6 +173,6 @@ export const Search = (props) => {
   );
 };
 
-Search.propTypes = {
+Catalogue.propTypes = {
   match: PropTypes.object,
 };

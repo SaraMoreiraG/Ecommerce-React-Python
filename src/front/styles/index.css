@@ -5,6 +5,12 @@
   width: 100%;
   z-index: 100;
 }
+.jumbotron-home,
+.catalogue,
+.product-detail {
+  margin-top: 87px; /* Margin to push down the content below the fixed-top components */
+}
+
 .jumbotron-nav-bar {
   position: fixed;
   top: 0;
@@ -36,4 +42,12 @@ a:-webkit-any-link {
   text-decoration: none;
   color: white;
   cursor: pointer;
+}
+/********* MAIN RULES ********/
+.container {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+.row {
+  margin: 0;
 }
