@@ -20,7 +20,7 @@ export const Home = () => {
           </p>
           <div className="col-7">
             <Link to={"/catalogue/" + "allproducts"}>
-              <p className="button my-3">SHOP NOW</p>
+              <p className="button-black my-3">SHOP NOW</p>
             </Link>
           </div>
         </div>

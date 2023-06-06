@@ -132,7 +132,7 @@ export const ProductDetails = (props) => {
 
           <div className="d-flex">
             <div className="col-9">
-              <p className="button">ADD TO CART</p>
+              <p className="button-black">ADD TO CART</p>
             </div>
             <div className="col-2">
               <i

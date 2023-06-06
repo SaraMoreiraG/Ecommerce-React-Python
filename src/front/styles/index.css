@@ -1,3 +1,19 @@
+h1 {
+  font-size: 22px;
+  margin: 0;
+}
+h2 {
+  font-size: 20px;
+}
+h3 {
+  font-size: 14px;
+  font-weight: 400;
+}
+h4 {
+  font-size: 12px;
+  margin: 0px;
+  padding-left: 8px;
+}
 /********* NavBar & .jumbotron-nav-bar ********/
 .navbar {
   position: fixed;
@@ -5,10 +21,12 @@
   width: 100%;
   z-index: 100;
 }
-.jumbotron-home,
+.favorites,
+.register,
 .catalogue,
 .product-detail {
   margin-top: 87px; /* Margin to push down the content below the fixed-top components */
+  margin-bottom: 80px;
 }
 
 .jumbotron-nav-bar {
@@ -51,20 +69,28 @@ a:-webkit-any-link {
 .row {
   margin: 0;
 }
-.button {
+.button-black,
+.button-white {
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
   visibility: visible;
-  background-color: #000;
-  border: #000 1px solid;
-  color: #fff;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-.button:hover {
+.button-black {
+  background-color: #000;
+  border: #000 1px solid;
+  color: #fff;
+}
+.button-white {
+  background-color: #fff;
+  border: #000 1px solid;
+  color: #000;
+}
+.button-black:hover {
   background-color: #fff;
   border: #000 1px solid;
   color: #000;

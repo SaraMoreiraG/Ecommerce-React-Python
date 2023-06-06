@@ -79,36 +79,18 @@ export const Navbar = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body">
-              <div>
-                Some text as placeholder. In real life you can have the elements
-                you have chosen. Like, text, images, lists, etc.
+
+            <div className="offcanvas-body px-4">
+              <h3 className="col-12">Email Address</h3>
+              <input type="text" className="col-12 mb-3"></input>
+              <h3 className="col-12">Password</h3>
+              <input type="text" className="col-12 mb-3"></input>
+              <div className="col-12">
+                <p className="button-black">LOG IN</p>
               </div>
-              <div className="dropdown mt-3">
-                <button
-                  className="btn btn-secondary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                >
-                  Dropdown button
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+              <h3>Forgot your password?</h3>{" "}
+              <div className="col-12">
+                <p className="button-white">CREATE AN ACCOUNT</p>
               </div>
             </div>
           </div>
