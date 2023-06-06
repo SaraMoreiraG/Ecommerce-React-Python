@@ -51,3 +51,41 @@ a:-webkit-any-link {
 .row {
   margin: 0;
 }
+.button {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  visibility: visible;
+  background-color: #000;
+  border: #000 1px solid;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.button:hover {
+  background-color: #fff;
+  border: #000 1px solid;
+  color: #000;
+}
+i.fa-heart {
+  font-size: 24px;
+  color: #000;
+  transition: transform 0.5s ease;
+  transform: translateX(15%);
+}
+.form-check-input {
+  background-color: #fff !important;
+  color: #000;
+  border: #000 1px solid !important;
+  border-radius: 0 !important;
+  margin-top: 0;
+  padding: 10px;
+}
+.form-check-input.checked:hover {
+  cursor: pointer;
+}
+.form-check-input.checked {
+  background-color: #000 !important;
+}

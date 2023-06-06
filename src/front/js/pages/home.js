@@ -12,15 +12,17 @@ export const Home = () => {
   return (
     <div className="home">
       <div className="jumbotron-home ps-5">
-        <div className="text-center col-4 m-5 p-5">
-          <h1>Lorem ipsum</h1>
+        <div className="row d-flex justify-content-center text-center col-4 m-5 p-5">
+          <h1>E-COMMERCE</h1>
           <p>
             dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
             incididunt ut labore.
           </p>
-          <Link to={"/catalogue/" + "allproducts"} className="btn btn-dark">
-            <span>Link to: all products</span>
-          </Link>
+          <div className="col-7">
+            <Link to={"/catalogue/" + "allproducts"}>
+              <p className="button my-3">SHOP NOW</p>
+            </Link>
+          </div>
         </div>
       </div>
 
