@@ -153,7 +153,7 @@ export const ProductDetails = (props) => {
             />
             <h3 className="ms-2 mb-0">I agree withTerms & Conditions</h3>
           </div>
-          <p className="button blue my-3">BUY</p>
+          <p className="button-black blue my-3">BUY</p>
         </div>
       </div>
     </div>

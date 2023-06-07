@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export const Collections = () => {
   return (
-    <div className="collections container d-flex pt-3">
+    <div className="collections container d-flex pt-4">
       <div className="col-4 d-grid">
         <Link to={"/catalogue/" + "Scarf"} className="zoom-img">
           <img src="https://new-ella-demo.myshopify.com/cdn/shop/files/1_257d98ae-1c96-4fdd-b3ea-8439950530cb_370x.jpg?v=1630924167" />

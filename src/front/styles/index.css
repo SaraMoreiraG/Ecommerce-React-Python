@@ -37,6 +37,9 @@ h4 {
   margin-top: 50px;
   background-color: #000;
 }
+.mandatory {
+  color: red;
+}
 /* Media queries for responsiveness in navbar */
 @media (max-width: 768px) {
   .jumbotron-nav-bar {
@@ -62,12 +65,18 @@ a:-webkit-any-link {
   cursor: pointer;
 }
 /********* MAIN RULES ********/
+.underline {
+  text-decoration-line: underline;
+}
 .container {
   padding-left: 80px;
   padding-right: 80px;
 }
 .row {
   margin: 0;
+}
+.button {
+  cursor: pointer;
 }
 .button-black,
 .button-white {

@@ -19,11 +19,11 @@ export const Card = () => {
         <p className="quick-add p-2">QUICK ADD</p>
       </div>
       <div className="card-body">
-        <h5 className="card-title">Product Name</h5>
+        <h4 className="card-title">PRODUCT NAME</h4>
         <p className="card-description">
           Product description: Some quick example text to build.
         </p>
-        <p className="card-price">$280</p>
+        <h3 className="bold">$280</h3>
       </div>
     </div>
   );
