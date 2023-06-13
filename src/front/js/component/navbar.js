@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { CartItem } from "./cartItem";
+
 export const Navbar = () => {
   return (
-    <nav className="navbar navbar-light bg-light fixed-top">
+    <nav className="navbar navbar-light bg-light">
       <div className="container">
         <Link to="/">
           <span className="navbar-brand mb-0 h1">e-commerce</span>
@@ -22,15 +24,15 @@ export const Navbar = () => {
           {/********* Offcanvas Shopping Cart ***********/}
           <div
             className="offcanvas offcanvas-end"
+            data-bs-scroll="true"
             tabIndex="-1"
             id="offcanvasRight"
             aria-labelledby="offcanvasRightLabel"
           >
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">
+            <div className="offcanvas-header pb-0 bg-danger">
+              <h1 className="offcanvas-title" id="offcanvasRightLabel">
                 Shopping Cart
-              </h5>
-              <h5>0 items</h5>
+              </h1>
               <button
                 type="button"
                 className="btn-close"
@@ -38,10 +40,13 @@ export const Navbar = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body">
-              <p>
-                Try scrolling the rest of the page to see this option in action.
-              </p>
+            <div className="offcanvas-body bg-primary pt-0">
+              <h5 className="py-3">0 items</h5>
+              <CartItem />
+              <hr></hr>
+              <CartItem />
+              <hr></hr>
+              <p>Subtotal:</p>
             </div>
           </div>
 
@@ -63,15 +68,15 @@ export const Navbar = () => {
           </button>
           {/********* Offcanvas Sign in ***********/}
           <div
-            className="offcanvas offcanvas-start"
+            className="offcanvas offcanvas-end"
             tabIndex="-1"
             id="offcanvasExample"
             aria-labelledby="offcanvasExampleLabel"
           >
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasExampleLabel">
+            <div className="offcanvas-header px-4">
+              <h1 className="offcanvas-title" id="offcanvasExampleLabel">
                 Login
-              </h5>
+              </h1>
               <button
                 type="button"
                 className="btn-close"
@@ -79,41 +84,27 @@ export const Navbar = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body">
-              <div>
-                Some text as placeholder. In real life you can have the elements
-                you have chosen. Like, text, images, lists, etc.
+
+            <div className="offcanvas-body px-4">
+              <h3 className="col-12">
+                Email Address <span className="mandatory">*</span>
+              </h3>
+              <input type="text" className="col-12 mb-3"></input>
+              <h3 className="col-12">
+                Password <span className="mandatory">*</span>
+              </h3>
+              <input type="text" className="col-12 mb-3"></input>
+              <div className="col-12">
+                <p className="button-black">LOG IN</p>
               </div>
-              <div className="dropdown mt-3">
-                <button
-                  className="btn btn-secondary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                >
-                  Dropdown button
-                </button>
-                <ul className="dropdown-menu">
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Another action
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item" href="#">
-                      Something else here
-                    </a>
-                  </li>
-                </ul>
+              <h3 className="underline button">Forgot your password?</h3>{" "}
+              <div className="col-12 py-2">
+                <p className="button-white">CREATE AN ACCOUNT</p>
               </div>
             </div>
           </div>
 
-          <h5> or </h5>
+          <h5>or</h5>
 
           <Link to="/register">
             <button className="btn">

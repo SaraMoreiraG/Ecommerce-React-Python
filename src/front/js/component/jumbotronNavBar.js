@@ -5,7 +5,7 @@ export const JumbotronNavBar = () => (
     <div className="container">
       <p className="d-flex justify-items-start m-0 p-0">
         <button
-          className="btn text-light"
+          className="btn text-light ps-0"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#collections"

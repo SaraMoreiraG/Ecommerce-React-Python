@@ -1,0 +1,35 @@
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #cfcfcf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0;
+  cursor: pointer;
+}
+.circle.active {
+  border-color: #fcfff4;
+}
+.circle-color {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+}
+.blue {
+  background-color: #5b31f4;
+  border-color: #5b31f4;
+}
+.blue:hover {
+  background-color: #3c0def;
+  border-color: #3c0def;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 2px #0000001e;
+}
+.purple {
+  background-color: #9d88f9;
+  border-color: #9d88f9;
+}

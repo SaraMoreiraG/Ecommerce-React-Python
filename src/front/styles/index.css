@@ -1,3 +1,52 @@
+h1 {
+  font-size: 22px;
+  margin: 0;
+}
+h2 {
+  font-size: 20px;
+}
+h3 {
+  font-size: 14px;
+  font-weight: 400;
+}
+h4 {
+  font-size: 12px;
+  margin: 0px;
+  padding-left: 8px;
+}
+/********* NavBar & .jumbotron-nav-bar ********/
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+.favorites,
+.register,
+.catalogue,
+.product-detail {
+  margin-top: 87px; /* Margin to push down the content below the fixed-top components */
+  margin-bottom: 80px;
+}
+
+.jumbotron-nav-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+  margin-top: 50px;
+  background-color: #000;
+}
+.mandatory {
+  color: red;
+}
+/* Media queries for responsiveness in navbar */
+@media (max-width: 768px) {
+  .jumbotron-nav-bar {
+    margin-top: 0;
+    top: 56px;
+  }
+}
 nav .btn {
   display: flex;
   align-items: center;
@@ -15,6 +64,63 @@ a:-webkit-any-link {
   color: white;
   cursor: pointer;
 }
-.jumbotron-nav-bar {
+/********* MAIN RULES ********/
+.underline {
+  text-decoration-line: underline;
+}
+.container {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+.row {
+  margin: 0;
+}
+.button {
+  cursor: pointer;
+}
+.button-black,
+.button-white {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  visibility: visible;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.button-black {
   background-color: #000;
+  border: #000 1px solid;
+  color: #fff;
+}
+.button-white {
+  background-color: #fff;
+  border: #000 1px solid;
+  color: #000;
+}
+.button-black:hover {
+  background-color: #fff;
+  border: #000 1px solid;
+  color: #000;
+}
+i.fa-heart {
+  font-size: 24px;
+  color: #000;
+  transition: transform 0.5s ease;
+  transform: translateX(15%);
+}
+.form-check-input {
+  background-color: #fff !important;
+  color: #000;
+  border: #000 1px solid !important;
+  border-radius: 0 !important;
+  margin-top: 0;
+  padding: 10px;
+}
+.form-check-input.checked:hover {
+  cursor: pointer;
+}
+.form-check-input.checked {
+  background-color: #000 !important;
 }
