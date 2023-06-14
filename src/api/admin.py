@@ -1,7 +1,6 @@
-  
 import os
 from flask_admin import Admin
-from .models import db, User
+from .models import db, User, Product, Collection, Color, Size, Stock, Favorites
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -10,8 +9,18 @@ def setup_admin(app):
     admin = Admin(app, name='4Geeks Admin', template_mode='bootstrap3')
 
     
-    # Add your models here, for example this is how we add a the User model to the admin
-    admin.add_view(ModelView(User, db.session))
+    # Customize the ModelView for the User model
+    class UserAdminModelView(ModelView):
+        column_list = ('id', 'name', 'email', 'password', 'favorites', 'orders')  # Include favorites and orders columns
+        column_labels = {
+            'favorites': 'Favorites',  # Rename the column label if desired
+            'orders': 'Orders'
+        }
 
-    # You can duplicate that line to add mew models
-    # admin.add_view(ModelView(YourModelName, db.session))
+    admin.add_view(UserAdminModelView(User, db.session))
+    admin.add_view(ModelView(Product, db.session))
+    admin.add_view(ModelView(Collection, db.session))
+    admin.add_view(ModelView(Color, db.session))
+    admin.add_view(ModelView(Size, db.session))
+    admin.add_view(ModelView(Stock, db.session))
+    admin.add_view(ModelView(Favorites, db.session))
