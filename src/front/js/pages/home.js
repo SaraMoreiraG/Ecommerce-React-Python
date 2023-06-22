@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 
@@ -8,7 +8,13 @@ import "../../styles/home.css";
 
 export const Home = () => {
   const { store, actions } = useContext(Context);
+  const [info, setInfo] = useState();
 
+  useEffect(() => {
+    setInfo("Holi");
+  }, []);
+
+  console.log(store);
   return (
     <div className="home">
       <div className="jumbotron-home ps-5">
