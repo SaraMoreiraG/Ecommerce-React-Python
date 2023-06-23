@@ -13,6 +13,48 @@ export const Catalogue = (props) => {
   const [rotate, setRotate] = useState(0);
   const [showList, setShowList] = useState(false);
 
+  const [productList, setProductList] = useState([]);
+
+  const [filters, setFilters] = useState({
+    product_id: null,
+    collection_names: [params.theid],
+    min_price: null,
+    max_price: null,
+    size_ids: [],
+    color_ids: [],
+    in_stock: null,
+  });
+
+  useEffect(() => {
+    actions.getProducts(filters);
+  }, [filters]);
+
+  const handleCollections = (event) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+
+    console.log("collectionNames:", filters.collection_names);
+
+    setFilters((prevFilters) => {
+      if (isChecked) {
+        return {
+          ...prevFilters,
+          collection_names: [...prevFilters.collection_names, value],
+        };
+      } else {
+        return {
+          ...prevFilters,
+          collection_names: prevFilters.collection_names.filter(
+            (item) => item !== value
+          ),
+        };
+      }
+    });
+
+    console.log("Updated filters:", filters);
+    actions.getProducts(filters);
+  };
+
   const handleClick = () => {
     setRotate((prevRotate) => (prevRotate === 0 ? 180 : 0));
     setShowList((prevShowList) => !prevShowList);
@@ -45,9 +87,22 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
             {showList && (
               <ul className="pt-2">
-                <li>Scarfs</li>
-                <li>Blouses</li>
-                <li>Accesories</li>
+                {store.collections &&
+                  store.collections.map((category) => (
+                    <li key={category.id}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={category.name}
+                          checked={filters.collection_names.includes(
+                            category.name
+                          )}
+                          onChange={handleCollections}
+                        />
+                        {category.name}
+                      </label>
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
@@ -123,25 +178,25 @@ export const Catalogue = (props) => {
               <h4>^</h4>
             </div>
             <hr className="m-0"></hr>
-            <div class="mt-2">
+            <div className="mt-2">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
               />
-              <label class="form-check-label ms-1" for="flexCheckDefault">
+              <label className="form-check-label ms-1" for="flexCheckDefault">
                 Default checkbox
               </label>
             </div>
-            <div class="mt-2">
+            <div className="mt-2">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
               />
-              <label class="form-check-label ms-1" for="flexCheckDefault">
+              <label className="form-check-label ms-1" for="flexCheckDefault">
                 Default checkbox
               </label>
             </div>
@@ -160,12 +215,14 @@ export const Catalogue = (props) => {
           </p>
           <hr></hr>
           <div className="row pt-4 justify-content-between">
+            {store.products &&
+              store.products.map((item) => <Card key={item.id} item={item} />)}
+            {/* <Card />
             <Card />
             <Card />
             <Card />
             <Card />
-            <Card />
-            <Card />
+            <Card /> */}
           </div>
         </div>
       </div>

@@ -12,15 +12,28 @@ from flask_jwt_extended import jwt_required
 api = Blueprint('api', __name__)
 
 
+from flask import request, jsonify
+
+from flask import request, jsonify
+
 @api.route('/products/filter', methods=['GET'])
 def filter_products():
     product_id = request.args.get('product_id')
-    collection_ids = request.args.getlist('collection_id')
+    collection_names = request.args.getlist('collection_names[]')
     min_price = request.args.get('min_price')
     max_price = request.args.get('max_price')
-    size_ids = request.args.getlist('size_id')
-    color_ids = request.args.getlist('color_id')
+    size_ids = request.args.getlist('size_ids[]')
+    color_ids = request.args.getlist('color_ids[]')
     in_stock = request.args.get('in_stock')
+
+    print('Arguments:')
+    print('product_id:', product_id)
+    print('collection_names:', collection_names)
+    print('min_price:', min_price)
+    print('max_price:', max_price)
+    print('size_ids:', size_ids)
+    print('color_ids:', color_ids)
+    print('in_stock:', in_stock)
 
     # Query the products based on the filter criteria
     query = Product.query
@@ -28,9 +41,9 @@ def filter_products():
     if product_id:
         query = query.filter(Product.id == product_id)
 
-    if collection_ids:
-        collection_filters = [Product.collections.any(Collection.id == id) for id in collection_ids]
-        query = query.filter(or_(*collection_filters))
+    if collection_names:
+        # Filter based on collection names
+        query = query.filter(Product.collections.any(Collection.name.in_(collection_names)))
 
     if min_price:
         query = query.filter(Product.price >= min_price)
@@ -54,6 +67,9 @@ def filter_products():
     # Serialize the products and return them as JSON
     serialized_products = [product.serialize() for product in products]
     return jsonify(serialized_products)
+
+
+
 
 @api.route("/collections", methods=["GET"])
 def get_all_collections():
