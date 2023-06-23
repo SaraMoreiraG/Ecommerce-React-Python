@@ -58,7 +58,7 @@ def filter_products():
 @api.route("/collections", methods=["GET"])
 def get_all_collections():
     collections = Collection.query.all()
-    return jsonify({"collections": [collection.serialize() for collection in collections]}), 200
+    return jsonify([collection.serialize() for collection in collections]), 200
 
 @api.route("/sizes", methods=["GET"])
 def get_all_sizes():
@@ -154,14 +154,16 @@ def create_collections():
     created_collections = []
     for collection_data in collections:
         name = collection_data.get('name')
+        img = collection_data.get('img')
         if name:
-            collection = Collection(name=name)
+            collection = Collection(name=name, img=img)
             db.session.add(collection)
             created_collections.append(collection.serialize())
 
     db.session.commit()
 
     return jsonify(created_collections), 201
+
 
 @api.route('/sizes', methods=['POST'])
 def create_sizes():

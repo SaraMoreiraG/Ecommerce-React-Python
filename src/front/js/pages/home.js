@@ -3,18 +3,12 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 
 import { Card } from "../component/card.js";
-import { Collections } from "../component/collections.js";
+
 import "../../styles/home.css";
 
 export const Home = () => {
-  const { store, actions } = useContext(Context);
-  const [info, setInfo] = useState();
+  const { store } = useContext(Context);
 
-  useEffect(() => {
-    setInfo("Holi");
-  }, []);
-
-  console.log(store);
   return (
     <div className="home">
       <div className="jumbotron-home ps-5">
@@ -35,7 +29,21 @@ export const Home = () => {
         </div>
       </div>
 
-      <Collections />
+      <div className="collections container d-flex pt-4">
+        {store.collections &&
+          store.collections.map((item) => {
+            return (
+              <div key={item.id} className="col-4 d-grid">
+                <Link to={"/catalogue/" + "Scarf"} className="zoom-img">
+                  <img src={item.img} />
+                  <div className="text-img start-0 end-0 top-0 bottom-0">
+                    <h3>{item.name}</h3>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
+      </div>
 
       <div className="container d-grid pt-5 ">
         <div className="row text-center">
@@ -44,12 +52,10 @@ export const Home = () => {
           </h2>
         </div>
         <div className="row pt-4">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {store.offers &&
+            store.offers.map((item) => {
+              return <Card key={item.id} item={item} />;
+            })}
         </div>
       </div>
     </div>

@@ -53,11 +53,13 @@ class Product(db.Model):
 class Collection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    img = db.Column(db.String(255), unique=True, nullable=False)
 
     def serialize(self):
         return {
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'img': self.img
         }
 
 class Color(db.Model):
