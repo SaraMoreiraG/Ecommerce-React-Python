@@ -15,7 +15,7 @@ api = Blueprint('api', __name__)
 @api.route('/products/filter', methods=['GET'])
 def filter_products():
     product_id = request.args.get('product_id')
-    collection_ids = request.args.getlist('collection_id')
+    collection_names = request.args.getlist('collection_names')
     min_price = request.args.get('min_price')
     max_price = request.args.get('max_price')
     size_ids = request.args.getlist('size_id')
@@ -28,9 +28,9 @@ def filter_products():
     if product_id:
         query = query.filter(Product.id == product_id)
 
-    if collection_ids:
-        collection_filters = [Product.collections.any(Collection.id == id) for id in collection_ids]
-        query = query.filter(or_(*collection_filters))
+    if collection_names:
+        # Filter based on collection names
+        query = query.filter(Product.collections.any(Collection.name.in_(collection_names)))
 
     if min_price:
         query = query.filter(Product.price >= min_price)

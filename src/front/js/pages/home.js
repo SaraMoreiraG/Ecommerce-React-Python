@@ -34,7 +34,7 @@ export const Home = () => {
           store.collections.map((item) => {
             return (
               <div key={item.id} className="col-4 d-grid">
-                <Link to={"/catalogue/" + "Scarf"} className="zoom-img">
+                <Link to={"/catalogue/" + item.name} className="zoom-img">
                   <img src={item.img} />
                   <div className="text-img start-0 end-0 top-0 bottom-0">
                     <h3>{item.name}</h3>

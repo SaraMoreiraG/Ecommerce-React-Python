@@ -18,6 +18,12 @@ export const Catalogue = (props) => {
     setShowList((prevShowList) => !prevShowList);
   };
 
+  useEffect(() => {
+    actions.getProducts({ collectionName: params.theid });
+  }, []);
+
+  console.log(store.products);
+
   return (
     <div className="catalogue container">
       <div className="row m-0">
@@ -123,25 +129,25 @@ export const Catalogue = (props) => {
               <h4>^</h4>
             </div>
             <hr className="m-0"></hr>
-            <div class="mt-2">
+            <div className="mt-2">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
               />
-              <label class="form-check-label ms-1" for="flexCheckDefault">
+              <label className="form-check-label ms-1" for="flexCheckDefault">
                 Default checkbox
               </label>
             </div>
-            <div class="mt-2">
+            <div className="mt-2">
               <input
-                class="form-check-input"
+                className="form-check-input"
                 type="checkbox"
                 value=""
                 id="flexCheckDefault"
               />
-              <label class="form-check-label ms-1" for="flexCheckDefault">
+              <label className="form-check-label ms-1" for="flexCheckDefault">
                 Default checkbox
               </label>
             </div>
@@ -160,12 +166,14 @@ export const Catalogue = (props) => {
           </p>
           <hr></hr>
           <div className="row pt-4 justify-content-between">
+            {store.products &&
+              store.products.map((item) => <Card key={item.id} item={item} />)}
+            {/* <Card />
             <Card />
             <Card />
             <Card />
             <Card />
-            <Card />
-            <Card />
+            <Card /> */}
           </div>
         </div>
       </div>
