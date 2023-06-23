@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const Card = () => {
+export const Card = ({ item }) => {
   return (
     <div className="card col-3 p-3">
       <div className="zoom-img">
@@ -13,17 +13,15 @@ export const Card = () => {
           />
         </Link>
         <i
-          class="fa-regular fa-heart p-2"
+          className="fa-regular fa-heart p-2"
           onClick={() => console.log("FAAAV")}
         ></i>
         <p className="quick-add p-2">QUICK ADD</p>
       </div>
       <div className="card-body">
-        <h4 className="card-title">PRODUCT NAME</h4>
-        <p className="card-description">
-          Product description: Some quick example text to build.
-        </p>
-        <h3 className="bold">$280</h3>
+        <h4 className="card-title">{item.name}</h4>
+        <p className="card-description">{item.description}</p>
+        <h3 className="bold">${item.price}</h3>
       </div>
     </div>
   );

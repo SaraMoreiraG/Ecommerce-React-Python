@@ -32,7 +32,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         );
         const data = await response.json();
-        console.log("fetching:", data);
         await setStore({ offers: data });
       },
 
@@ -47,7 +46,6 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         );
         const data = await response.json();
-        console.log("fetching:", data);
         await setStore({ collections: data });
       },
 
@@ -59,8 +57,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         });
         const data = await response.json();
-        console.log("fetching:", data);
-        await setStore({ collections: data });
+        await setStore({ sizes: data });
       },
 
       getColors: async () => {
@@ -71,8 +68,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           },
         });
         const data = await response.json();
-        console.log("fetching:", data);
-        await setStore({ collections: data });
+        await setStore({ colors: data });
       },
     },
   };
