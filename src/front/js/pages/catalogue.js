@@ -13,16 +13,52 @@ export const Catalogue = (props) => {
   const [rotate, setRotate] = useState(0);
   const [showList, setShowList] = useState(false);
 
+  const [productList, setProductList] = useState([]);
+
+  const [filters, setFilters] = useState({
+    product_id: null,
+    collection_names: [params.theid],
+    min_price: null,
+    max_price: null,
+    size_ids: [],
+    color_ids: [],
+    in_stock: null,
+  });
+
+  useEffect(() => {
+    actions.getProducts(filters);
+  }, [filters]);
+
+  const handleCollections = (event) => {
+    const value = event.target.value;
+    const isChecked = event.target.checked;
+
+    console.log("collectionNames:", filters.collection_names);
+
+    setFilters((prevFilters) => {
+      if (isChecked) {
+        return {
+          ...prevFilters,
+          collection_names: [...prevFilters.collection_names, value],
+        };
+      } else {
+        return {
+          ...prevFilters,
+          collection_names: prevFilters.collection_names.filter(
+            (item) => item !== value
+          ),
+        };
+      }
+    });
+
+    console.log("Updated filters:", filters);
+    actions.getProducts(filters);
+  };
+
   const handleClick = () => {
     setRotate((prevRotate) => (prevRotate === 0 ? 180 : 0));
     setShowList((prevShowList) => !prevShowList);
   };
-
-  useEffect(() => {
-    actions.getProducts({ collectionName: params.theid });
-  }, []);
-
-  console.log(store.products);
 
   return (
     <div className="catalogue container">
@@ -51,9 +87,22 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
             {showList && (
               <ul className="pt-2">
-                <li>Scarfs</li>
-                <li>Blouses</li>
-                <li>Accesories</li>
+                {store.collections &&
+                  store.collections.map((category) => (
+                    <li key={category.id}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={category.name}
+                          checked={filters.collection_names.includes(
+                            category.name
+                          )}
+                          onChange={handleCollections}
+                        />
+                        {category.name}
+                      </label>
+                    </li>
+                  ))}
               </ul>
             )}
           </div>
