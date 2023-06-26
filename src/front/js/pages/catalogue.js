@@ -27,13 +27,12 @@ export const Catalogue = (props) => {
 
   useEffect(() => {
     actions.getProducts(filters);
+    actions.getSizes();
   }, [filters]);
 
   const handleCollections = (event) => {
     const value = event.target.value;
     const isChecked = event.target.checked;
-
-    console.log("collectionNames:", filters.collection_names);
 
     setFilters((prevFilters) => {
       if (isChecked) {
@@ -50,8 +49,25 @@ export const Catalogue = (props) => {
         };
       }
     });
+    actions.getProducts(filters);
+  };
 
-    console.log("Updated filters:", filters);
+  const handleSizes = (sizeId) => {
+    setFilters((prevFilters) => {
+      const isSelected = prevFilters.size_ids.includes(sizeId);
+
+      if (isSelected) {
+        return {
+          ...prevFilters,
+          size_ids: prevFilters.size_ids.filter((item) => item !== sizeId),
+        };
+      } else {
+        return {
+          ...prevFilters,
+          size_ids: [...prevFilters.size_ids, sizeId],
+        };
+      }
+    });
     actions.getProducts(filters);
   };
 
@@ -164,11 +180,18 @@ export const Catalogue = (props) => {
             </div>
             <hr className="m-0"></hr>
             <div className="d-flex justify-content-center pt-2">
-              <p className="size-text px-2 me-2">XS</p>
-              <p className="size-text px-2 me-2">S</p>
-              <p className="size-text px-2 me-2">M</p>
-              <p className="size-text px-2 me-2">L</p>
-              <p className="size-text px-2 me-2">XL</p>
+              {store.sizes &&
+                store.sizes.map((size) => (
+                  <p
+                    key={size.id}
+                    className={`size-text px-2 me-2 ${
+                      filters.size_ids.includes(size.id) ? "active" : ""
+                    }`}
+                    onClick={() => handleSizes(size.id)}
+                  >
+                    {size.name}
+                  </p>
+                ))}
             </div>
             <div></div>
           </div>

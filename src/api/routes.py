@@ -16,6 +16,8 @@ from flask import request, jsonify
 
 from flask import request, jsonify
 
+from sqlalchemy import select, exists
+
 @api.route('/products/filter', methods=['GET'])
 def filter_products():
     product_id = request.args.get('product_id')
@@ -26,15 +28,6 @@ def filter_products():
     color_ids = request.args.getlist('color_ids[]')
     in_stock = request.args.get('in_stock')
 
-    print('Arguments:')
-    print('product_id:', product_id)
-    print('collection_names:', collection_names)
-    print('min_price:', min_price)
-    print('max_price:', max_price)
-    print('size_ids:', size_ids)
-    print('color_ids:', color_ids)
-    print('in_stock:', in_stock)
-
     # Query the products based on the filter criteria
     query = Product.query
 
@@ -42,7 +35,6 @@ def filter_products():
         query = query.filter(Product.id == product_id)
 
     if collection_names:
-        # Filter based on collection names
         query = query.filter(Product.collections.any(Collection.name.in_(collection_names)))
 
     if min_price:
@@ -52,8 +44,8 @@ def filter_products():
         query = query.filter(Product.price <= max_price)
 
     if size_ids:
-        size_filters = [ProductSizeColor.size_id == size_id for size_id in size_ids]
-        query = query.filter(or_(*size_filters))
+        query = query.filter(Product.stock.any(Stock.size_id.in_(size_ids)))
+
 
     if color_ids:
         color_filters = [ProductSizeColor.color_id == color_id for color_id in color_ids]
@@ -71,6 +63,8 @@ def filter_products():
 
 
 
+
+
 @api.route("/collections", methods=["GET"])
 def get_all_collections():
     collections = Collection.query.all()
@@ -79,7 +73,7 @@ def get_all_collections():
 @api.route("/sizes", methods=["GET"])
 def get_all_sizes():
     sizes = Size.query.all()
-    return jsonify({"sizes": [size.serialize() for size in sizes]}), 200
+    return jsonify([size.serialize() for size in sizes]), 200
 
 @api.route("/colors", methods=["GET"])
 def get_all_colors():
