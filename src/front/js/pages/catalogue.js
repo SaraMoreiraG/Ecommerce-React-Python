@@ -25,6 +25,13 @@ export const Catalogue = (props) => {
     in_stock: null,
   });
 
+  const [arrows, setArrows] = useState({
+    categories: true,
+    price: true,
+    size: true,
+    stock: true,
+  });
+
   useEffect(() => {
     actions.getProducts(filters);
     actions.getSizes();
@@ -35,6 +42,12 @@ export const Catalogue = (props) => {
     const isChecked = event.target.checked;
 
     setFilters((prevFilters) => {
+      if (prevFilters.collection_names.includes("allproducts")) {
+        return {
+          ...prevFilters,
+          collection_names: [value],
+        };
+      }
       if (isChecked) {
         return {
           ...prevFilters,
@@ -71,7 +84,7 @@ export const Catalogue = (props) => {
     actions.getProducts(filters);
   };
 
-  const handleClick = () => {
+  const handleArrow = () => {
     setRotate((prevRotate) => (prevRotate === 0 ? 180 : 0));
     setShowList((prevShowList) => !prevShowList);
   };
@@ -90,25 +103,27 @@ export const Catalogue = (props) => {
             <div className="d-flex justify-content-between">
               <h4 className="w-100">CATEGORIES</h4>
               <h4
-                style={{
-                  transform: `rotate(${rotate}deg)`,
-                  cursor: "pointer",
-                  transition: "transform 0.5s ease",
-                }}
-                onClick={handleClick}
+                className={`arrow ${arrows.categories ? "down" : "up"}`}
+                onClick={() =>
+                  setArrows((prevArrows) => ({
+                    ...prevArrows,
+                    categories: !prevArrows.categories,
+                  }))
+                }
               >
                 ^
               </h4>
             </div>
             <hr className="m-0"></hr>
-            {showList && (
+            {arrows.categories && (
               <ul className="pt-2">
                 {store.collections &&
                   store.collections.map((category) => (
                     <li key={category.id}>
-                      <label>
+                      <h5>
                         <input
                           type="checkbox"
+                          className="me-2"
                           value={category.name}
                           checked={filters.collection_names.includes(
                             category.name
@@ -116,7 +131,7 @@ export const Catalogue = (props) => {
                           onChange={handleCollections}
                         />
                         {category.name}
-                      </label>
+                      </h5>
                     </li>
                   ))}
               </ul>
@@ -126,103 +141,165 @@ export const Catalogue = (props) => {
           <div className="price">
             <div className="d-flex justify-content-between">
               <h4 className="w-100">PRICE</h4>
-              <h4>^</h4>
+              <h4
+                className={`arrow ${arrows.price ? "down" : "up"}`}
+                onClick={() =>
+                  setArrows((prevArrows) => ({
+                    ...prevArrows,
+                    price: !prevArrows.price,
+                  }))
+                }
+              >
+                ^
+              </h4>
             </div>
             <hr className="m-0"></hr>
-            <div className="range_container m-0 pt-4">
-              <div className="sliders_control">
-                <input
-                  id="fromSlider"
-                  type="range"
-                  value="10"
-                  min="0"
-                  max="100"
-                />
-                <input
-                  id="toSlider"
-                  type="range"
-                  value="40"
-                  min="0"
-                  max="100"
-                />
-              </div>
-              <div className="form_control">
-                <div className="form_control_container">
-                  <div className="form_control_container__time">Min</div>
+            {arrows.price && (
+              <div className="range_container m-0 pt-4">
+                <div className="sliders_control">
                   <input
-                    className="form_control_container__time__input"
-                    type="number"
-                    id="fromInput"
+                    id="fromSlider"
+                    type="range"
                     value="10"
                     min="0"
                     max="100"
                   />
-                </div>
-                <div className="form_control_container">
-                  <div className="form_control_container__time">Max</div>
                   <input
-                    className="form_control_container__time__input"
-                    type="number"
-                    id="toInput"
+                    id="toSlider"
+                    type="range"
                     value="40"
                     min="0"
                     max="100"
                   />
                 </div>
+                <div className="form_control">
+                  <div className="form_control_container">
+                    <div className="form_control_container__time">Min</div>
+                    <input
+                      className="form_control_container__time__input"
+                      type="number"
+                      id="fromInput"
+                      value="10"
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+                  <div className="form_control_container">
+                    <div className="form_control_container__time">Max</div>
+                    <input
+                      className="form_control_container__time__input"
+                      type="number"
+                      id="toInput"
+                      value="40"
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="size mt-3">
             <div className="d-flex justify-content-between">
               <h4 className="w-100">SIZE</h4>
-              <h4>^</h4>
+              <h4
+                className={`arrow ${arrows.size ? "down" : "up"}`}
+                onClick={() =>
+                  setArrows((prevArrows) => ({
+                    ...prevArrows,
+                    size: !prevArrows.size,
+                  }))
+                }
+              >
+                ^
+              </h4>
             </div>
             <hr className="m-0"></hr>
-            <div className="d-flex justify-content-center pt-2">
-              {store.sizes &&
-                store.sizes.map((size) => (
-                  <p
-                    key={size.id}
-                    className={`size-text px-2 me-2 ${
-                      filters.size_ids.includes(size.id) ? "active" : ""
-                    }`}
-                    onClick={() => handleSizes(size.id)}
-                  >
-                    {size.name}
-                  </p>
-                ))}
-            </div>
-            <div></div>
+            {arrows.size && (
+              <div className="row pt-2 m-0">
+                {store.sizes &&
+                  store.sizes.map((size) => (
+                    <div key={size.id} className="col-3 m-0">
+                      <p
+                        className={`size-text px-2 ${
+                          filters.size_ids.includes(size.id) ? "active" : ""
+                        }`}
+                        onClick={() => handleSizes(size.id)}
+                      >
+                        {size.name}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
           <div className="categories mt-3">
             <div className="d-flex justify-content-between">
               <h4 className="w-100">AVAILABILITY</h4>
-              <h4>^</h4>
+              <h4
+                className={`arrow ${arrows.stock ? "down" : "up"}`}
+                onClick={() =>
+                  setArrows((prevArrows) => ({
+                    ...prevArrows,
+                    stock: !prevArrows.stock,
+                  }))
+                }
+              >
+                ^
+              </h4>
             </div>
             <hr className="m-0"></hr>
-            <div className="mt-2">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label ms-1" for="flexCheckDefault">
-                Default checkbox
-              </label>
-            </div>
-            <div className="mt-2">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value=""
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label ms-1" for="flexCheckDefault">
-                Default checkbox
-              </label>
-            </div>
+            {arrows.stock && (
+              <div className="row pt-2 m-0">
+                <div className="mt-2">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label ms-1"
+                    for="flexCheckDefault"
+                  >
+                    In stock
+                  </label>
+                </div>
+                <div className="mt-2">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="flexCheckDefault"
+                  />
+                  <label
+                    className="form-check-label ms-1"
+                    for="flexCheckDefault"
+                  >
+                    All products
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="mt-2">
+            <p
+              className="button-white p-2"
+              onClick={() =>
+                setFilters({
+                  product_id: null,
+                  collection_names: [params.theid],
+                  min_price: null,
+                  max_price: null,
+                  size_ids: [],
+                  color_ids: [],
+                  in_stock: null,
+                })
+              }
+            >
+              CLEAN ALL FILTERS
+            </p>
           </div>
         </div>
 
