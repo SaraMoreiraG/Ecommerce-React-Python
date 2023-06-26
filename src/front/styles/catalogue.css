@@ -5,6 +5,21 @@ ul {
   list-style-type: none;
   padding: 0;
 }
+input[type="checkbox"] {
+  border-radius: 100px;
+  accent-color: #000;
+}
+/* ARROW  */
+.arrow {
+  cursor: pointer;
+  transition: transform 0.5s ease;
+}
+.up {
+  transform: rotate(0);
+}
+.down {
+  transform: rotate(180deg);
+}
 /* DOUBLE SLIDER */
 .range_container {
   display: flex;
