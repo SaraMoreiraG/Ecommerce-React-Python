@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 import { Card } from "../component/card";
+import { MultiRangeSlider } from "../component/multiRangeSlider/MultiRangeSlider";
 import "../../styles/catalogue.css";
 
 export const Catalogue = (props) => {
@@ -178,24 +179,13 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
 
             {arrows.price && (
-              <div className="range_container m-0 pt-4 mb-5">
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  className="thumb thumb--zindex-3"
-                />
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  className="thumb thumb--zindex-4"
-                />
-                <div className="slider">
-                  <div className="slider__track" />
-                  <div className="slider__range" />
-                </div>
-              </div>
+              <MultiRangeSlider
+                min={0}
+                max={1000}
+                onChange={({ min, max }) =>
+                  console.log(`min = ${min}, max = ${max}`)
+                }
+              />
             )}
           </div>
 
