@@ -79,6 +79,35 @@ export const Catalogue = (props) => {
     actions.getProducts(filters);
   };
 
+  const handlePrice = (event) => {
+    const inputRangeElement = $(inputRangeRef.current);
+
+    inputRangeElement.each(function () {
+      const value = $(this).data("slider-value");
+      const separator = value.indexOf(",");
+      let parsedValue;
+
+      if (separator !== -1) {
+        parsedValue = value.split(",").map((item) => parseFloat(item));
+      } else {
+        parsedValue = parseFloat(value);
+      }
+
+      inputRangeElement.slider({
+        formatter: function (value) {
+          return "$" + value;
+        },
+        min: parseFloat(inputRangeElement.data("slider-min")),
+        max: parseFloat(inputRangeElement.data("slider-max")),
+        range: inputRangeElement.data("slider-range") === "true",
+        value: parsedValue,
+        tooltip_split:
+          inputRangeElement.data("slider-tooltip_split") === "true",
+        tooltip: inputRangeElement.data("slider-tooltip") === "true",
+      });
+    });
+  };
+
   return (
     <div className="catalogue container">
       <div className="row m-0">
@@ -149,46 +178,22 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
 
             {arrows.price && (
-              <div className="range_container m-0 pt-4">
-                <div className="sliders_control">
-                  <input
-                    id="fromSlider"
-                    type="range"
-                    value="10"
-                    min="0"
-                    max="100"
-                  />
-                  <input
-                    id="toSlider"
-                    type="range"
-                    value="40"
-                    min="0"
-                    max="100"
-                  />
-                </div>
-                <div className="form_control">
-                  <div className="form_control_container">
-                    <div className="form_control_container__time">Min</div>
-                    <input
-                      className="form_control_container__time__input"
-                      type="number"
-                      id="fromInput"
-                      value="10"
-                      min="0"
-                      max="100"
-                    />
-                  </div>
-                  <div className="form_control_container">
-                    <div className="form_control_container__time">Max</div>
-                    <input
-                      className="form_control_container__time__input"
-                      type="number"
-                      id="toInput"
-                      value="40"
-                      min="0"
-                      max="100"
-                    />
-                  </div>
+              <div className="range_container m-0 pt-4 mb-5">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  className="thumb thumb--zindex-3"
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  className="thumb thumb--zindex-4"
+                />
+                <div className="slider">
+                  <div className="slider__track" />
+                  <div className="slider__range" />
                 </div>
               </div>
             )}
@@ -213,7 +218,7 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
 
             {arrows.size && (
-              <div className="row pt-2 m-0">
+              <div className="row pt-2 m-0 mb-5">
                 {store.sizes &&
                   store.sizes.map((size) => (
                     <div key={size.id} className="col-3 m-0">
@@ -231,7 +236,7 @@ export const Catalogue = (props) => {
             )}
           </div>
 
-          <div className="stock mt-3">
+          <div className="stock">
             <div className="d-flex justify-content-between">
               <h5 className="w-100">AVAILABILITY</h5>
               <h5
@@ -263,13 +268,13 @@ export const Catalogue = (props) => {
             )}
           </div>
 
-          <div className="mt-2">
+          <div className="mt-3">
             <p
               className="button-white p-2"
               onClick={() =>
                 setFilters({
                   product_id: null,
-                  collection_names: [params.theid],
+                  collection_names: [],
                   min_price: null,
                   max_price: null,
                   size_ids: [],
@@ -297,7 +302,6 @@ export const Catalogue = (props) => {
           <div className="row pt-4 justify-content-between">
             {store.products &&
               store.products.map((item) => <Card key={item.id} item={item} />)}
-          
           </div>
         </div>
       </div>
