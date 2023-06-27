@@ -5,10 +5,6 @@ ul {
   list-style-type: none;
   padding: 0;
 }
-input[type="checkbox"] {
-  border-radius: 100px;
-  accent-color: #000;
-}
 /* ARROW  */
 .arrow {
   cursor: pointer;
