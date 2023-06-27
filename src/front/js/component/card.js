@@ -21,7 +21,7 @@ export const Card = ({ item }) => {
       <div className="card-body">
         <h4 className="card-title">{item.name}</h4>
         <p className="card-description">{item.description}</p>
-        <h3 className="bold">${item.price}</h3>
+        <h5 className="bold">${item.price}</h5>
       </div>
     </div>
   );

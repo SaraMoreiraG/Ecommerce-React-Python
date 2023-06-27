@@ -10,11 +10,6 @@ export const Catalogue = (props) => {
   const { store, actions } = useContext(Context);
   const params = useParams();
 
-  const [rotate, setRotate] = useState(0);
-  const [showList, setShowList] = useState(false);
-
-  const [productList, setProductList] = useState([]);
-
   const [filters, setFilters] = useState({
     product_id: null,
     collection_names: [params.theid],
@@ -84,15 +79,10 @@ export const Catalogue = (props) => {
     actions.getProducts(filters);
   };
 
-  const handleArrow = () => {
-    setRotate((prevRotate) => (prevRotate === 0 ? 180 : 0));
-    setShowList((prevShowList) => !prevShowList);
-  };
-
   return (
     <div className="catalogue container">
       <div className="row m-0">
-        <div className="link-tree pt-4 ms-2">
+        <div className="link-tree pt-4 ms-2 mb-3">
           <p>home - collection</p>
         </div>
       </div>
@@ -101,8 +91,8 @@ export const Catalogue = (props) => {
         <div className="search-bar col-3">
           <div className="categories">
             <div className="d-flex justify-content-between">
-              <h4 className="w-100">CATEGORIES</h4>
-              <h4
+              <h5 className="w-100">CATEGORIES</h5>
+              <h5
                 className={`arrow ${arrows.categories ? "down" : "up"}`}
                 onClick={() =>
                   setArrows((prevArrows) => ({
@@ -112,15 +102,17 @@ export const Catalogue = (props) => {
                 }
               >
                 ^
-              </h4>
+              </h5>
             </div>
+
             <hr className="m-0"></hr>
+
             {arrows.categories && (
-              <ul className="pt-2">
+              <ul className="mt-3 mb-5">
                 {store.collections &&
                   store.collections.map((category) => (
                     <li key={category.id}>
-                      <h5>
+                      <p className="my-2">
                         <input
                           type="checkbox"
                           className="me-2"
@@ -131,7 +123,7 @@ export const Catalogue = (props) => {
                           onChange={handleCollections}
                         />
                         {category.name}
-                      </h5>
+                      </p>
                     </li>
                   ))}
               </ul>
@@ -140,8 +132,8 @@ export const Catalogue = (props) => {
 
           <div className="price">
             <div className="d-flex justify-content-between">
-              <h4 className="w-100">PRICE</h4>
-              <h4
+              <h5 className="w-100">PRICE</h5>
+              <h5
                 className={`arrow ${arrows.price ? "down" : "up"}`}
                 onClick={() =>
                   setArrows((prevArrows) => ({
@@ -151,9 +143,11 @@ export const Catalogue = (props) => {
                 }
               >
                 ^
-              </h4>
+              </h5>
             </div>
+
             <hr className="m-0"></hr>
+
             {arrows.price && (
               <div className="range_container m-0 pt-4">
                 <div className="sliders_control">
@@ -202,8 +196,8 @@ export const Catalogue = (props) => {
 
           <div className="size mt-3">
             <div className="d-flex justify-content-between">
-              <h4 className="w-100">SIZE</h4>
-              <h4
+              <h5 className="w-100">SIZE</h5>
+              <h5
                 className={`arrow ${arrows.size ? "down" : "up"}`}
                 onClick={() =>
                   setArrows((prevArrows) => ({
@@ -213,9 +207,11 @@ export const Catalogue = (props) => {
                 }
               >
                 ^
-              </h4>
+              </h5>
             </div>
+
             <hr className="m-0"></hr>
+
             {arrows.size && (
               <div className="row pt-2 m-0">
                 {store.sizes &&
@@ -234,10 +230,11 @@ export const Catalogue = (props) => {
               </div>
             )}
           </div>
-          <div className="categories mt-3">
+
+          <div className="stock mt-3">
             <div className="d-flex justify-content-between">
-              <h4 className="w-100">AVAILABILITY</h4>
-              <h4
+              <h5 className="w-100">AVAILABILITY</h5>
+              <h5
                 className={`arrow ${arrows.stock ? "down" : "up"}`}
                 onClick={() =>
                   setArrows((prevArrows) => ({
@@ -247,42 +244,25 @@ export const Catalogue = (props) => {
                 }
               >
                 ^
-              </h4>
+              </h5>
             </div>
+
             <hr className="m-0"></hr>
+
             {arrows.stock && (
               <div className="row pt-2 m-0">
-                <div className="mt-2">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label
-                    className="form-check-label ms-1"
-                    for="flexCheckDefault"
-                  >
-                    In stock
-                  </label>
-                </div>
-                <div className="mt-2">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    value=""
-                    id="flexCheckDefault"
-                  />
-                  <label
-                    className="form-check-label ms-1"
-                    for="flexCheckDefault"
-                  >
-                    All products
-                  </label>
-                </div>
+                <p className="p-0 m-0 mb-2">
+                  <input type="checkbox" className="me-2" />
+                  In stock
+                </p>
+                <p className="p-0">
+                  <input type="checkbox" className="me-2" />
+                  All products
+                </p>
               </div>
             )}
           </div>
+
           <div className="mt-2">
             <p
               className="button-white p-2"
@@ -307,7 +287,7 @@ export const Catalogue = (props) => {
           <div className="row banner-search justify-content-end p-0">
             <img src="https://new-ella-demo.myshopify.com/cdn/shop/collections/category-default-1.jpg?v=1646985103&width=1100" />
           </div>
-          <h1 className="col-12 text-start pt-3">{params.theid} collection</h1>
+          <h2 className="col-12 text-start pt-3">{params.theid} collection</h2>
           <p>
             Nullam aliquet vestibulum augue non varius. Cras cosmo congue an
             melitos. Duis tristique del ante le maliquam praesent murna de
@@ -317,12 +297,7 @@ export const Catalogue = (props) => {
           <div className="row pt-4 justify-content-between">
             {store.products &&
               store.products.map((item) => <Card key={item.id} item={item} />)}
-            {/* <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card /> */}
+          
           </div>
         </div>
       </div>
