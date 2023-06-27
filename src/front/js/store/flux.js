@@ -64,6 +64,10 @@ const getState = ({ getStore, getActions, setStore }) => {
           params.append("size_ids[]", sizeId);
         });
 
+        filterOptions?.color_ids?.forEach((colorId) => {
+          params.append("color_ids[]", colorId);
+        });
+
         appendParam("color_ids", filterOptions?.colorId);
         appendParam("in_stock", filterOptions?.inStock);
 

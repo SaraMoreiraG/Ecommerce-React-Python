@@ -46,36 +46,36 @@ export const ProductDetails = (props) => {
               alt="..."
             />
           </div>
-          <div className="row">
+          {/* <div className="row">
             <div className="more-fotos bg-success p-0">MORE FOTOS</div>
-          </div>
+          </div> */}
         </div>
         <div className="col-md-5 ps-5">
-          <h1>
+          <h2>
             (Product 23) Sample - Clothing And Accessory Boutiques For Sale
-          </h1>
+          </h2>
 
           <div className="d-flex align-items-end py-3">
             <i className="fa-solid fa-star"></i>
             <i className="fa-solid fa-star"></i>
             <i className="fa-solid fa-star"></i>
             <i className="fa-solid fa-star"></i>
-            <i className="fa-solid fa-star"></i>
-            <h4>1 Review</h4>
+            <i className="fa-solid fa-star me-2"></i>
+            <h5 className="fw-light m-0">1 Review</h5>
           </div>
 
-          <h3 className="mb-3">
+          <h5 className="fw-light mb-3">
             Nam tempus turpis at metus scelerisque placerat nulla deumantos
             solicitud felis. Pellentesque diam dolor, elementum etos lobortis...
-          </h3>
+          </h5>
 
-          <h3>Collection: Lorem Ipsum</h3>
-          <h3>Href: Lorem Ipsum</h3>
-          <h3>Availability: Lorem Ipsum</h3>
+          <p>Collection: Lorem Ipsum</p>
+          <p>Href: Lorem Ipsum</p>
+          <p>Availability: Lorem Ipsum</p>
 
           <h2 className="my-3">$ 345</h2>
 
-          <h3>Color: {activeColor}</h3>
+          <p className="fw-bold">Color: {activeColor}</p>
           <div className="d-flex mb-3">
             <div
               className={`circle ${activeColor === 0 ? "active" : ""}`}
@@ -106,7 +106,9 @@ export const ProductDetails = (props) => {
             </div>
           </div>
 
-          <h3>Size: {activeSize !== null ? sizes[activeSize] : ""}</h3>
+          <p className="fw-bold">
+            Size: {activeSize !== null ? sizes[activeSize] : ""}
+          </p>
           <div className="d-flex mb-3">
             {sizes.map((size, index) => (
               <p
@@ -119,7 +121,7 @@ export const ProductDetails = (props) => {
             ))}
           </div>
 
-          <h3>Quantity: {quantity}</h3>
+          <p className="fw-bold">Quantity: {quantity}</p>
           <div className="d-flex mb-3">
             <p className={"size-text"} onClick={() => handleQuantityClick()}>
               -
@@ -151,7 +153,9 @@ export const ProductDetails = (props) => {
               value="None"
               onClick={() => handleTermsPolicyClick()}
             />
-            <h3 className="ms-2 mb-0">I agree withTerms & Conditions</h3>
+            <h5 className="fw-light ms-2 mb-0">
+              I agree withTerms & Conditions
+            </h5>
           </div>
           <p className="button-black blue my-3">BUY</p>
         </div>

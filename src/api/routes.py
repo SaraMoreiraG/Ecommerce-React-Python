@@ -48,8 +48,7 @@ def filter_products():
 
 
     if color_ids:
-        color_filters = [ProductSizeColor.color_id == color_id for color_id in color_ids]
-        query = query.filter(or_(*color_filters))
+        query = query.filter(Product.stock.any(Stock.color_id.in_(color_ids)))
 
     if in_stock:
         query = query.filter(ProductSizeColor.quantity > 0)
@@ -82,7 +81,7 @@ def get_price_range():
 @api.route("/colors", methods=["GET"])
 def get_all_colors():
     colors = Color.query.all()
-    return jsonify({"colors": [color.serialize() for color in colors]}), 200
+    return jsonify([color.serialize() for color in colors]), 200
 
 @api.route('/user', methods=['GET'])
 @jwt_required()

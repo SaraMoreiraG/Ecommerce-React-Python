@@ -158,3 +158,24 @@ i.fa-heart {
 .form-check-input.checked {
   background-color: #000 !important;
 }
+/* CIRCLE COLORS */
+.circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #cfcfcf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0;
+  cursor: pointer;
+}
+.circle.active {
+  border-color: #fcfff4;
+}
+.circle-color {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+}
