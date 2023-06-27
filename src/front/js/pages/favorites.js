@@ -16,12 +16,10 @@ export const Favorites = () => {
       <h1 className="mt-3 mb-5">YOUR FAVORITES</h1>
       <hr></hr>
       <div className="row pt-4 justify-content-between">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {store.user &&
+          store.user.favorites.map((item) => (
+            <Card key={item.id} item={item} />
+          ))}
       </div>
     </div>
   );
