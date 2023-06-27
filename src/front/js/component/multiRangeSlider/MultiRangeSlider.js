@@ -45,8 +45,10 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
   }, [minVal, maxVal, onChange]);
+
+  // Return the component
   return (
-    <div className="bg-danger">
+    <div className=" d-flex justify-content-center mt-3 mb-5 bg-primary">
       <input
         type="range"
         min={min}
@@ -73,11 +75,38 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
         }}
         className="thumb thumb--zindex-4"
       />
-      <div className="slider">
+      <div className="slider bg-primary">
         <div className="slider__track" />
         <div ref={range} className="slider__range" />
-        <div className="slider__left-value">{minVal}</div>
-        <div className="slider__right-value">{maxVal}</div>
+        <div className="d-flex bg-success">
+          <input
+            type="text"
+            className="slider__left-value bg-danger"
+            placeholder={minVal}
+          />
+          <p className="slider__center-value">to</p>
+          <input
+            type="text"
+            className="slider__right-value"
+            placeholder={maxVal}
+          />
+        </div>
+        <p
+          className="button-white p-2"
+          onClick={() =>
+            setFilters({
+              product_id: null,
+              collection_names: [],
+              min_price: null,
+              max_price: null,
+              size_ids: [],
+              color_ids: [],
+              in_stock: null,
+            })
+          }
+        >
+          CLEAN ALL FILTERS
+        </p>
       </div>
     </div>
   );
