@@ -23,7 +23,7 @@ export const CartItem = () => {
           Product description: Some quick example text to build.
         </p>
         <p>Color / XL</p>
-        <h3 className="bold mb-3">$280</h3>
+        <h4 className="bold mb-3">$280</h4>
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex">
             <p className={"size-text"} onClick={() => handleQuantityClick()}>

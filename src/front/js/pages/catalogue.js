@@ -25,12 +25,14 @@ export const Catalogue = (props) => {
     categories: true,
     price: true,
     size: true,
-    stock: true,
+    colors: true,
   });
 
   useEffect(() => {
     actions.getProducts(filters);
     actions.getSizes();
+    actions.getPriceRange();
+    actions.getColors();
   }, [filters]);
 
   const handleCollections = (event) => {
@@ -80,33 +82,11 @@ export const Catalogue = (props) => {
     actions.getProducts(filters);
   };
 
-  const handlePrice = (event) => {
-    const inputRangeElement = $(inputRangeRef.current);
-
-    inputRangeElement.each(function () {
-      const value = $(this).data("slider-value");
-      const separator = value.indexOf(",");
-      let parsedValue;
-
-      if (separator !== -1) {
-        parsedValue = value.split(",").map((item) => parseFloat(item));
-      } else {
-        parsedValue = parseFloat(value);
-      }
-
-      inputRangeElement.slider({
-        formatter: function (value) {
-          return "$" + value;
-        },
-        min: parseFloat(inputRangeElement.data("slider-min")),
-        max: parseFloat(inputRangeElement.data("slider-max")),
-        range: inputRangeElement.data("slider-range") === "true",
-        value: parsedValue,
-        tooltip_split:
-          inputRangeElement.data("slider-tooltip_split") === "true",
-        tooltip: inputRangeElement.data("slider-tooltip") === "true",
-      });
-    });
+  const handleColors = (index) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      color_ids: [...prevFilters.color_ids, index],
+    }));
   };
 
   return (
@@ -117,11 +97,11 @@ export const Catalogue = (props) => {
         </div>
       </div>
 
-      <div className="row m-0">
-        <div className="search-bar col-3">
-          <div className="categories">
+      <div className="row justify-content-between m-0">
+        <div className="search-bar col-2">
+          <div className="categories mb-5">
             <div className="d-flex justify-content-between">
-              <h5 className="w-100">CATEGORIES</h5>
+              <h5>CATEGORIES</h5>
               <h5
                 className={`arrow ${arrows.categories ? "down" : "up"}`}
                 onClick={() =>
@@ -138,7 +118,7 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
 
             {arrows.categories && (
-              <ul className="mt-3 mb-5">
+              <ul>
                 {store.collections &&
                   store.collections.map((category) => (
                     <li key={category.id}>
@@ -160,9 +140,9 @@ export const Catalogue = (props) => {
             )}
           </div>
 
-          <div className="price">
+          <div className="price mb-5">
             <div className="d-flex justify-content-between">
-              <h5 className="w-100">PRICE</h5>
+              <h5>PRICE</h5>
               <h5
                 className={`arrow ${arrows.price ? "down" : "up"}`}
                 onClick={() =>
@@ -178,20 +158,16 @@ export const Catalogue = (props) => {
 
             <hr className="m-0"></hr>
 
-            {arrows.price && (
-              <div className="row pt-2 m-0 mb-5">
-                <MultiRangeSlider
-                  min={0}
-                  max={1000}
-                  onChange={({ min, max }) =>
-                    console.log(`min = ${min}, max = ${max}`)
-                  }
-                />
-              </div>
+            {arrows.price && store.priceRange && (
+              <MultiRangeSlider
+                filters={setFilters}
+                min={store.priceRange.min_price}
+                max={store.priceRange.max_price}
+              />
             )}
           </div>
 
-          <div className="size mt-3">
+          <div className="size mb-5">
             <div className="d-flex justify-content-between">
               <h5 className="w-100">SIZE</h5>
               <h5
@@ -210,7 +186,7 @@ export const Catalogue = (props) => {
             <hr className="m-0"></hr>
 
             {arrows.size && (
-              <div className="row pt-2 m-0 mb-5">
+              <div className="row pt-2 m-0">
                 {store.sizes &&
                   store.sizes.map((size) => (
                     <div key={size.id} className="col-3 m-0">
@@ -228,15 +204,15 @@ export const Catalogue = (props) => {
             )}
           </div>
 
-          <div className="stock">
+          <div className="colors mb-5">
             <div className="d-flex justify-content-between">
-              <h5 className="w-100">AVAILABILITY</h5>
+              <h5 className="w-100">COLORS</h5>
               <h5
-                className={`arrow ${arrows.stock ? "down" : "up"}`}
+                className={`arrow ${arrows.colors ? "down" : "up"}`}
                 onClick={() =>
                   setArrows((prevArrows) => ({
                     ...prevArrows,
-                    stock: !prevArrows.stock,
+                    colors: !prevArrows.colors,
                   }))
                 }
               >
@@ -246,21 +222,28 @@ export const Catalogue = (props) => {
 
             <hr className="m-0"></hr>
 
-            {arrows.stock && (
+            {arrows.colors && (
               <div className="row pt-2 m-0">
-                <p className="p-0 m-0 mb-2">
-                  <input type="checkbox" className="me-2" />
-                  In stock
-                </p>
-                <p className="p-0">
-                  <input type="checkbox" className="me-2" />
-                  All products
-                </p>
+                {store.colors &&
+                  store.colors.map((color) => {
+                    return (
+                      <div
+                        key={color.id}
+                        className="circle"
+                        onClick={() => handleColors(color.id)}
+                      >
+                        <div
+                          className="circle-color"
+                          style={{ backgroundColor: color.rgb }}
+                        ></div>
+                      </div>
+                    );
+                  })}
               </div>
             )}
           </div>
 
-          <div className="mt-3">
+          <div className="mb-5">
             <p
               className="button-white p-2"
               onClick={() =>
@@ -280,18 +263,27 @@ export const Catalogue = (props) => {
           </div>
         </div>
 
-        <div className="col-9">
-          <div className="row banner-search justify-content-end p-0">
-            <img src="https://new-ella-demo.myshopify.com/cdn/shop/collections/category-default-1.jpg?v=1646985103&width=1100" />
+        <div className="col-10 p-0 ps-3 m-0">
+          <div className="row m-0 p-0">
+            <img
+              className="p-0"
+              src="https://new-ella-demo.myshopify.com/cdn/shop/collections/category-default-1.jpg?v=1646985103&width=1100"
+            />
           </div>
-          <h2 className="col-12 text-start pt-3">{params.theid} collection</h2>
-          <p>
-            Nullam aliquet vestibulum augue non varius. Cras cosmo congue an
-            melitos. Duis tristique del ante le maliquam praesent murna de
-            tellus laoreet cosmopolis. Quisque hendrerit nibh an purus
-          </p>
-          <hr></hr>
-          <div className="row pt-4 justify-content-between">
+          <div>
+            <h2 className="col-12 text-start pt-3">
+              {params.theid === "allproducts"
+                ? "All Our Products"
+                : `${params.theid} collection`}
+            </h2>
+            <p>
+              Nullam aliquet vestibulum augue non varius. Cras cosmo congue an
+              melitos. Duis tristique del ante le maliquam praesent murna de
+              tellus laoreet cosmopolis. Quisque hendrerit nibh an purus
+            </p>
+            <hr></hr>
+          </div>
+          <div className="row pt-3 g-3">
             {store.products &&
               store.products.map((item) => <Card key={item.id} item={item} />)}
           </div>

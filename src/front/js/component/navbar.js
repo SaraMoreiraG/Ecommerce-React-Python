@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+
+import { Context } from "../store/appContext";
 
 import { CartItem } from "./cartItem";
 
 export const Navbar = () => {
+  const { store, actions } = useContext(Context);
+
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container">
@@ -30,9 +34,9 @@ export const Navbar = () => {
             aria-labelledby="offcanvasRightLabel"
           >
             <div className="offcanvas-header pb-0 bg-danger">
-              <h1 className="offcanvas-title" id="offcanvasRightLabel">
+              <h4 className="fw-bold" id="offcanvasRightLabel">
                 Shopping Cart
-              </h1>
+              </h4>
               <button
                 type="button"
                 className="btn-close"
@@ -41,7 +45,7 @@ export const Navbar = () => {
               ></button>
             </div>
             <div className="offcanvas-body bg-primary pt-0">
-              <h5 className="py-3">0 items</h5>
+              <h5 className="fw-light py-3">0 items</h5>
               <CartItem />
               <hr></hr>
               <CartItem />
@@ -73,10 +77,10 @@ export const Navbar = () => {
             id="offcanvasExample"
             aria-labelledby="offcanvasExampleLabel"
           >
-            <div className="offcanvas-header px-4">
-              <h1 className="offcanvas-title" id="offcanvasExampleLabel">
+            <div className="offcanvas-header px-2">
+              <h4 className="fw-bold" id="offcanvasExampleLabel">
                 Login
-              </h1>
+              </h4>
               <button
                 type="button"
                 className="btn-close"
@@ -86,19 +90,23 @@ export const Navbar = () => {
             </div>
 
             <div className="offcanvas-body px-4">
-              <h3 className="col-12">
+              <h5 className="col-12 fw-medium">
                 Email Address <span className="mandatory">*</span>
-              </h3>
+              </h5>
               <input type="text" className="col-12 mb-3"></input>
-              <h3 className="col-12">
+              <h5 className="col-12 fw-medium">
                 Password <span className="mandatory">*</span>
-              </h3>
+              </h5>
               <input type="text" className="col-12 mb-3"></input>
               <div className="col-12">
-                <p className="button-black">LOG IN</p>
+                <p className="button-black" onClick={() => actions.getUser()}>
+                  LOG IN
+                </p>
               </div>
-              <h3 className="underline button">Forgot your password?</h3>{" "}
-              <div className="col-12 py-2">
+              <h5 className="fw-normal underline button text-center">
+                Forgot your password?
+              </h5>{" "}
+              <div className="col-12 py-3">
                 <p className="button-white">CREATE AN ACCOUNT</p>
               </div>
             </div>

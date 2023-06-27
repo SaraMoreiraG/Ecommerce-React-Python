@@ -48,8 +48,7 @@ def filter_products():
 
 
     if color_ids:
-        color_filters = [ProductSizeColor.color_id == color_id for color_id in color_ids]
-        query = query.filter(or_(*color_filters))
+        query = query.filter(Product.stock.any(Stock.color_id.in_(color_ids)))
 
     if in_stock:
         query = query.filter(ProductSizeColor.quantity > 0)
@@ -59,11 +58,6 @@ def filter_products():
     # Serialize the products and return them as JSON
     serialized_products = [product.serialize() for product in products]
     return jsonify(serialized_products)
-
-
-
-
-
 
 @api.route("/collections", methods=["GET"])
 def get_all_collections():
@@ -75,10 +69,19 @@ def get_all_sizes():
     sizes = Size.query.all()
     return jsonify([size.serialize() for size in sizes]), 200
 
+@api.route("/products/price-range", methods=["GET"])
+def get_price_range():
+    # Get the maximum and minimum prices from the products
+    max_price = db.session.query(db.func.max(Product.price)).scalar()
+    min_price = db.session.query(db.func.min(Product.price)).scalar()
+
+    # Return the price range as a JSON response
+    return jsonify({"min_price": min_price, "max_price": max_price})
+
 @api.route("/colors", methods=["GET"])
 def get_all_colors():
     colors = Color.query.all()
-    return jsonify({"colors": [color.serialize() for color in colors]}), 200
+    return jsonify([color.serialize() for color in colors]), 200
 
 @api.route('/user', methods=['GET'])
 @jwt_required()

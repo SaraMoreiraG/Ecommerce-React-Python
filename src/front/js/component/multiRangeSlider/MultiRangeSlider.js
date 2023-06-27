@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import "./multiRangeSlider.css";
 
-export const MultiRangeSlider = ({ min, max, onChange }) => {
+export const MultiRangeSlider = ({ filters, min, max }) => {
   // Creating the state variables
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
@@ -41,71 +41,77 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
     }
   }, [maxVal, getPercent]);
 
-  // Get min and max values when their state changes
-  useEffect(() => {
-    onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
-
-  // Return the component
   return (
-    <div className=" d-flex justify-content-center mt-3 mb-5 bg-primary">
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={minVal}
-        ref={minValRef}
-        onChange={(event) => {
-          const value = Math.min(+event.target.value, maxVal - 1);
-          setMinVal(value);
-          event.target.value = value.toString();
-        }}
-        className="thumb thumb--zindex-5"
-      />
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={maxVal}
-        ref={maxValRef}
-        onChange={(event) => {
-          const value = Math.max(+event.target.value, minVal + 1);
-          setMaxVal(value);
-          event.target.value = value.toString();
-        }}
-        className="thumb thumb--zindex-4"
-      />
-      <div className="slider bg-primary">
-        <div className="slider__track" />
-        <div ref={range} className="slider__range" />
-        <div className="d-flex bg-success">
+    <div className="row justify-content-center mt-3 m-0">
+      <div className="d-flex justify-content-center">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={minVal}
+          ref={minValRef}
+          onChange={(event) => {
+            const value = Math.min(+event.target.value, maxVal - 1);
+            setMinVal(value);
+            event.target.value = value.toString();
+          }}
+          className="thumb thumb--zindex-5"
+        />
+        <input
+          type="range"
+          min={min}
+          max={max}
+          value={maxVal}
+          ref={maxValRef}
+          onChange={(event) => {
+            const value = Math.max(+event.target.value, minVal + 1);
+            setMaxVal(value);
+            event.target.value = value.toString();
+          }}
+          className="thumb thumb--zindex-4"
+        />
+        <div className="slider bg-success">
+          <div className="slider__track" />
+          <div ref={range} className="slider__range" />
+        </div>
+      </div>
+
+      <div className="d-flex justify-content-between mt-4 p-0">
+        <div className="col-4 d-flex align-items-center box px-2">
+          <span className="col-2">$</span>
           <input
             type="text"
-            className="slider__left-value bg-danger"
-            placeholder={minVal}
-          />
-          <p className="slider__center-value">to</p>
-          <input
-            type="text"
-            className="slider__right-value"
-            placeholder={maxVal}
+            className="col-10 price-input"
+            value={minVal}
+            readOnly
           />
         </div>
+        <div className="col-2 d-flex align-items-end justify-content-center p-0 m-0">
+          <span>to</span>
+        </div>
+        <div className="col-4 d-flex align-items-center box px-2">
+          <span className="col-2">$</span>
+
+          <input
+            type="text"
+            className="col-10 price-input"
+            value={maxVal}
+            readOnly
+          />
+        </div>
+      </div>
+      <div className="col-12 p-0">
         <p
-          className="button-white p-2"
+          className="button-black mt-3 p-2"
           onClick={() =>
-            setFilters({
-              product_id: null,
-              collection_names: [],
-              min_price: null,
-              max_price: null,
-              size_ids: [],
-              color_ids: [],
-              in_stock: null,
-            })
+            filters((prevFilters) => ({
+              ...prevFilters,
+              max_price: maxVal,
+              min_price: minVal,
+            }))
           }
         >
-          CLEAN ALL FILTERS
+          APPLY
         </p>
       </div>
     </div>
@@ -115,5 +121,4 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
 MultiRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
 };

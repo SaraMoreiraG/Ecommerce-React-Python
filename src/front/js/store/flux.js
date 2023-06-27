@@ -6,22 +6,31 @@ const getState = ({ getStore, getActions, setStore }) => {
       offers: null,
       collections: null,
       sizes: null,
+      priceRange: null,
       colors: null,
-      demo: null,
-      demo: [
-        {
-          title: "FIRST",
-          background: "white",
-          initial: "white",
-        },
-        {
-          title: "SECOND",
-          background: "white",
-          initial: "white",
-        },
-      ],
+      user: null,
     },
     actions: {
+      getUser: async () => {
+        const token = sessionStorage.getItem("token");
+        const options = {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/user",
+          options
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setStore({ user: data });
+          console.log("User found");
+        }
+      },
+
       getOffers: async () => {
         const response = await fetch(
           process.env.BACKEND_URL + "/api/products/filter",
@@ -56,11 +65,15 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         });
 
-        appendParam("min_price", filterOptions?.minPrice);
-        appendParam("max_price", filterOptions?.maxPrice);
+        appendParam("min_price", filterOptions?.min_price);
+        appendParam("max_price", filterOptions?.max_price);
 
         filterOptions?.size_ids?.forEach((sizeId) => {
           params.append("size_ids[]", sizeId);
+        });
+
+        filterOptions?.color_ids?.forEach((colorId) => {
+          params.append("color_ids[]", colorId);
         });
 
         appendParam("color_ids", filterOptions?.colorId);
@@ -111,6 +124,20 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         const data = await response.json();
         await setStore({ sizes: data });
+      },
+
+      getPriceRange: async () => {
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/products/price-range",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        await setStore({ priceRange: data });
       },
 
       getColors: async () => {
