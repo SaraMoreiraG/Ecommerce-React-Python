@@ -1,26 +1,14 @@
-.container {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* DOUBLE SLIDER */
 .slider {
   position: relative;
   width: 200px;
 }
 
 .slider__track,
-.slider__range,
-.slider__left-value,
-.slider__right-value {
-  position: absolute;
-}
-
-.slider__track,
 .slider__range {
   border-radius: 3px;
   height: 5px;
+  position: absolute;
 }
 
 .slider__track {
@@ -39,6 +27,7 @@
   color: #dee2e6;
   font-size: 12px;
   margin-top: 20px;
+  position: absolute;
 }
 
 .slider__left-value {
@@ -48,7 +37,6 @@
 .slider__right-value {
   right: -4px;
 }
-
 /* Removing the default appearance */
 .thumb,
 .thumb::-webkit-slider-thumb {
@@ -64,12 +52,16 @@
   outline: none;
 }
 
-.thumb--left {
+.thumb--zindex-3 {
   z-index: 3;
 }
 
-.thumb--right {
+.thumb--zindex-4 {
   z-index: 4;
+}
+
+.thumb--zindex-5 {
+  z-index: 5;
 }
 
 /* For Chrome browsers */

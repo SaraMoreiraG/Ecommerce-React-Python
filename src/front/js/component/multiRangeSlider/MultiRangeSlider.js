@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 import "./multiRangeSlider.css";
 
 export const MultiRangeSlider = ({ min, max, onChange }) => {
+  // Creating the state variables
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
-  const minValRef = useRef(min);
-  const maxValRef = useRef(max);
+  // Creating the refs
+  const minValRef = useRef(null);
+  const maxValRef = useRef(null);
   const range = useRef(null);
-
   // Convert to percentage
   const getPercent = useCallback(
     (value) => Math.round(((value - min) / (max - min)) * 100),
@@ -17,22 +18,26 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
 
   // Set width of the range to decrease from the left side
   useEffect(() => {
-    const minPercent = getPercent(minVal);
-    const maxPercent = getPercent(maxValRef.current);
+    if (maxValRef.current) {
+      const minPercent = getPercent(minVal);
+      const maxPercent = getPercent(+maxValRef.current.value);
 
-    if (range.current) {
-      range.current.style.left = `${minPercent}%`;
-      range.current.style.width = `${maxPercent - minPercent}%`;
+      if (range.current) {
+        range.current.style.left = `${minPercent}%`;
+        range.current.style.width = `${maxPercent - minPercent}%`;
+      }
     }
   }, [minVal, getPercent]);
 
   // Set width of the range to decrease from the right side
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current);
-    const maxPercent = getPercent(maxVal);
+    if (minValRef.current) {
+      const minPercent = getPercent(+minValRef.current.value);
+      const maxPercent = getPercent(maxVal);
 
-    if (range.current) {
-      range.current.style.width = `${maxPercent - minPercent}%`;
+      if (range.current) {
+        range.current.style.width = `${maxPercent - minPercent}%`;
+      }
     }
   }, [maxVal, getPercent]);
 
@@ -40,35 +45,34 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
   useEffect(() => {
     onChange({ min: minVal, max: maxVal });
   }, [minVal, maxVal, onChange]);
-
   return (
-    <div className="container">
+    <div className="bg-danger">
       <input
         type="range"
         min={min}
         max={max}
         value={minVal}
+        ref={minValRef}
         onChange={(event) => {
-          const value = Math.min(Number(event.target.value), maxVal - 1);
+          const value = Math.min(+event.target.value, maxVal - 1);
           setMinVal(value);
-          minValRef.current = value;
+          event.target.value = value.toString();
         }}
-        className="thumb thumb--left"
-        style={{ zIndex: minVal > max - 100 && "5" }}
+        className="thumb thumb--zindex-5"
       />
       <input
         type="range"
         min={min}
         max={max}
         value={maxVal}
+        ref={maxValRef}
         onChange={(event) => {
-          const value = Math.max(Number(event.target.value), minVal + 1);
+          const value = Math.max(+event.target.value, minVal + 1);
           setMaxVal(value);
-          maxValRef.current = value;
+          event.target.value = value.toString();
         }}
-        className="thumb thumb--right"
+        className="thumb thumb--zindex-4"
       />
-
       <div className="slider">
         <div className="slider__track" />
         <div ref={range} className="slider__range" />
