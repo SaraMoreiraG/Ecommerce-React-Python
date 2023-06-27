@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       offers: null,
       collections: null,
       sizes: null,
+      priceRange: null,
       colors: null,
       demo: null,
       demo: [
@@ -56,8 +57,8 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         });
 
-        appendParam("min_price", filterOptions?.minPrice);
-        appendParam("max_price", filterOptions?.maxPrice);
+        appendParam("min_price", filterOptions?.min_price);
+        appendParam("max_price", filterOptions?.max_price);
 
         filterOptions?.size_ids?.forEach((sizeId) => {
           params.append("size_ids[]", sizeId);
@@ -111,6 +112,19 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         const data = await response.json();
         await setStore({ sizes: data });
+      },
+      getPriceRange: async () => {
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/products/price-range",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        await setStore({ priceRange: data });
       },
 
       getColors: async () => {

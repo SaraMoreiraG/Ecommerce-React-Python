@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import "./multiRangeSlider.css";
 
-export const MultiRangeSlider = ({ min, max, onChange }) => {
+export const MultiRangeSlider = ({ filters, min, max }) => {
   // Creating the state variables
   const [minVal, setMinVal] = useState(min);
   const [maxVal, setMaxVal] = useState(max);
@@ -41,14 +41,8 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
     }
   }, [maxVal, getPercent]);
 
-  // Get min and max values when their state changes
-  useEffect(() => {
-    onChange({ min: minVal, max: maxVal });
-  }, [minVal, maxVal, onChange]);
-
-  // Return the component
   return (
-    <div className=" d-flex justify-content-center mt-3 mb-5 bg-primary">
+    <div className=" d-flex justify-content-center bg-primary">
       <input
         type="range"
         min={min}
@@ -91,23 +85,20 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
             placeholder={maxVal}
           />
         </div>
-        <p
-          className="button-white p-2"
-          onClick={() =>
-            setFilters({
-              product_id: null,
-              collection_names: [],
-              min_price: null,
-              max_price: null,
-              size_ids: [],
-              color_ids: [],
-              in_stock: null,
-            })
-          }
-        >
-          CLEAN ALL FILTERS
-        </p>
       </div>
+
+      <p
+        className="button-black p-2"
+        onClick={() =>
+          filters((prevFilters) => ({
+            ...prevFilters,
+            max_price: maxVal,
+            min_price: minVal,
+          }))
+        }
+      >
+        APPLY
+      </p>
     </div>
   );
 };
@@ -115,5 +106,4 @@ export const MultiRangeSlider = ({ min, max, onChange }) => {
 MultiRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
 };

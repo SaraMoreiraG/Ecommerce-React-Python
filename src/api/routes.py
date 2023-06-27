@@ -60,11 +60,6 @@ def filter_products():
     serialized_products = [product.serialize() for product in products]
     return jsonify(serialized_products)
 
-
-
-
-
-
 @api.route("/collections", methods=["GET"])
 def get_all_collections():
     collections = Collection.query.all()
@@ -74,6 +69,15 @@ def get_all_collections():
 def get_all_sizes():
     sizes = Size.query.all()
     return jsonify([size.serialize() for size in sizes]), 200
+
+@api.route("/products/price-range", methods=["GET"])
+def get_price_range():
+    # Get the maximum and minimum prices from the products
+    max_price = db.session.query(db.func.max(Product.price)).scalar()
+    min_price = db.session.query(db.func.min(Product.price)).scalar()
+
+    # Return the price range as a JSON response
+    return jsonify({"min_price": min_price, "max_price": max_price})
 
 @api.route("/colors", methods=["GET"])
 def get_all_colors():

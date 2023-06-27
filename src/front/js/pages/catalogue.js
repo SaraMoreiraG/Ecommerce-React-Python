@@ -31,6 +31,7 @@ export const Catalogue = (props) => {
   useEffect(() => {
     actions.getProducts(filters);
     actions.getSizes();
+    actions.getPriceRange();
   }, [filters]);
 
   const handleCollections = (event) => {
@@ -178,14 +179,12 @@ export const Catalogue = (props) => {
 
             <hr className="m-0"></hr>
 
-            {arrows.price && (
+            {arrows.price && store.priceRange && (
               <div className="row pt-2 m-0 mb-5">
                 <MultiRangeSlider
-                  min={0}
-                  max={1000}
-                  onChange={({ min, max }) =>
-                    console.log(`min = ${min}, max = ${max}`)
-                  }
+                  filters={setFilters}
+                  min={store.priceRange.min_price}
+                  max={store.priceRange.max_price}
                 />
               </div>
             )}
