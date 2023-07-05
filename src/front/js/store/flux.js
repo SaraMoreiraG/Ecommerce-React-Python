@@ -150,6 +150,34 @@ const getState = ({ getStore, getActions, setStore }) => {
         const data = await response.json();
         await setStore({ colors: data });
       },
+
+      addFavorite: async (favorite) => {
+        const store = getStore();
+        console.log("addFavorite", favorite);
+        const token = sessionStorage.getItem("token");
+
+        let newFav = {
+          user_id: store.user.id,
+          product_id: favorite,
+          key: "product_id",
+        };
+
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/favorites",
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(newFav),
+          }
+        );
+        if (response.ok) {
+          getActions().getUser();
+        }
+      },
     },
   };
 };

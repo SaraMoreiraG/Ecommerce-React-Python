@@ -1,7 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
+import { Context } from "../store/appContext";
+
 export const Card = ({ item }) => {
+  const { store, actions } = useContext(Context);
+  const favorites = store.user?.favorites || [];
+
   return (
     <div className="col">
       <div className="card rounded-0">
@@ -13,11 +18,22 @@ export const Card = ({ item }) => {
               alt="..."
             />
           </Link>
-          <i
-            className="fa-regular fa-heart p-2"
-            onClick={() => console.log("FAAAV")}
-          ></i>
           <p className="quick-add p-2">QUICK ADD</p>
+          {favorites.length > 0
+            ? favorites.map((favorite) => (
+                <i
+                  key={favorite.id}
+                  className="fa-solid fa-heart p-2"
+                  onClick={() => actions.addFavorite(favorite.id)}
+                ></i>
+              ))
+            : favorites.map((favorite) => (
+                <i
+                  key={favorite.id}
+                  className="fa-regular fa-heart p-2"
+                  onClick={() => actions.addFavorite(favorite.id)}
+                ></i>
+              ))}
         </div>
         <div className="card-body">
           <h4 className="card-title">{item.name}</h4>
