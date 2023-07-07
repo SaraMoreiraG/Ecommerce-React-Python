@@ -168,7 +168,7 @@ export const Navbar = () => {
                 className="btn"
                 type="button"
                 onClick={() => {
-                  sessionStorage.removeItem("token");
+                  actions.resetUser();
                   setIsLogin(false);
                 }}
               >

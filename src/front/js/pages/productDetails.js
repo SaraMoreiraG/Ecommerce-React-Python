@@ -8,12 +8,36 @@ import "../../styles/productDetails.css";
 export const ProductDetails = (props) => {
   const { store, actions } = useContext(Context);
   const params = useParams();
+  const [productInfo, setProductInfo] = useState(
+    store.products ? store.products[0] : null
+  );
 
   const [activeColor, setActiveColor] = useState(null);
   const sizes = ["XS", "S", "M", "L", "XL"];
   const [activeSize, setActiveSize] = useState(null);
   const [quantity, setQuantity] = useState(0);
   const [termsPolicy, setTermsPolicy] = useState(false);
+
+  const [isFavorite, setIsFavorite] = useState();
+
+  useEffect(() => {
+    const filters = {
+      product_id: params.theid,
+    };
+    actions.getProducts(filters);
+  }, []);
+
+  useEffect(() => {
+    if (store.user && store.user.favorites.length > 0) {
+      store.user.favorites.map((favorite) => {
+        if (favorite.product.id === store.products[0].id) {
+          setIsFavorite(true);
+        } else {
+          setIsFavorite(false);
+        }
+      });
+    }
+  }, [store.user]);
 
   const handleColorClick = (index) => {
     setActiveColor(index);
@@ -137,10 +161,19 @@ export const ProductDetails = (props) => {
               <p className="button-black">ADD TO CART</p>
             </div>
             <div className="col-2">
-              <i
-                class="fa-regular fa-heart p-2"
-                onClick={() => console.log("FAAAV")}
-              ></i>
+              {/*************** FAVORITE HEART ********************/}
+              {store.user && (
+                <i
+                  className={`fa-${
+                    isFavorite ? "solid" : "regular"
+                  } fa-heart p-2`}
+                  onClick={() =>
+                    isFavorite
+                      ? actions.deleteFavorite(store.products[0].id)
+                      : actions.addFavorite(store.products[0].id)
+                  }
+                ></i>
+              )}
             </div>
           </div>
 

@@ -27,7 +27,8 @@ def filter_products():
     size_ids = request.args.getlist('size_ids[]')
     color_ids = request.args.getlist('color_ids[]')
     in_stock = request.args.get('in_stock')
-
+    print('@@@@@@@@@@@@@@@@')
+    print(product_id)
     # Query the products based on the filter criteria
     query = Product.query
 
