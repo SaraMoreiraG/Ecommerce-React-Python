@@ -17,9 +17,10 @@ export const Favorites = () => {
       <hr></hr>
       <div className="row pt-4 justify-content-between">
         {store.user &&
-          store.user.favorites.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
+          store.user.favorites.map((item) => {
+            console.log(item);
+            return <Card key={item.id} item={item.product} />;
+          })}
       </div>
     </div>
   );

@@ -4,11 +4,28 @@ import { Context } from "../store/appContext";
 
 export const Register = () => {
   const { store, actions } = useContext(Context);
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    last_name: "",
+    email: "",
+    password: "",
+  });
   const [termsPolicy, setTermsPolicy] = useState(false);
 
   const handleTermsPolicyClick = () => {
-    setTermsPolicy(true);
-    console.log(termsPolicy);
+    setTermsPolicy(!termsPolicy);
+  };
+
+  const createNewUser = async () => {
+    const response = await fetch(process.env.BACKEND_URL + "/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userInfo),
+    });
+    if (response.ok) {
+      
+      console.log(response);
+    }
   };
 
   return (
@@ -25,18 +42,37 @@ export const Register = () => {
             Please register below to create an account
           </p>
           <p className="col-12 fw-semibold">First name</p>
-          <input type="text" className="col-12 mb-3"></input>
+          <input
+            type="text"
+            className="col-12 mb-3"
+            onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+          ></input>
           <p className="col-12 fw-semibold">Last name</p>
-          <input type="text" className="col-12 mb-3"></input>
+          <input
+            type="text"
+            className="col-12 mb-3"
+            onChange={(e) =>
+              setUserInfo({ ...userInfo, last_name: e.target.value })
+            }
+          ></input>
           <p className="col-12 fw-semibold">Your Email Address</p>
-          <input type="text" className="col-12 mb-3"></input>
+          <input
+            type="text"
+            className="col-12 mb-3"
+            onChange={(e) =>
+              setUserInfo({ ...userInfo, email: e.target.value })
+            }
+          ></input>
           <p className="col-12 fw-semibold">Your Password</p>
-          <input type="text" className="col-12 mb-3"></input>
+          <input
+            type="text"
+            className="col-12 mb-3"
+            onChange={(e) =>
+              setUserInfo({ ...userInfo, password: e.target.value })
+            }
+          ></input>
           <div className="d-flex align-items-center mb-4">
             <input
-              className={`form-check-input ${
-                termsPolicy === true ? "checked" : ""
-              }`}
               type="checkbox"
               value="None"
               onClick={() => handleTermsPolicyClick()}
@@ -44,7 +80,9 @@ export const Register = () => {
             <p className="fw-light ms-2 mb-0">I agree withTerms & Conditions</p>
           </div>
           <div className="col-9">
-            <p className="button-black">CREATE AN ACCOUNT</p>
+            <p className="button-black" onClick={() => createNewUser()}>
+              CREATE AN ACCOUNT
+            </p>
           </div>
         </div>
       </div>

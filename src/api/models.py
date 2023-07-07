@@ -4,9 +4,12 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
+    name = db.Column(db.String(120), unique=False, nullable=False)
+    last_name = db.Column(db.String(120), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
+    address = db.Column(db.String(120), unique=False, nullable=True)
+    country = db.Column(db.String(120), unique=False, nullable=True)
     favorites = db.relationship('Favorites', backref='user')
     orders = db.relationship('Order', backref='user')
 

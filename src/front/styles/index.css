@@ -179,3 +179,10 @@ i.fa-heart {
   height: 33px;
   border-radius: 50%;
 }
+/* FAV ICON */
+.fa-heart {
+  cursor: pointer;
+}
+.fa-heart:hover {
+  font-size: 28px;
+}

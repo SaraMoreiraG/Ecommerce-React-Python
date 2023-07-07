@@ -57,7 +57,7 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
         };
 
-        appendParam("product_id", filterOptions?.productId);
+        appendParam("product_id", filterOptions?.product_id);
 
         filterOptions?.collection_names?.forEach((collectionName) => {
           if (collectionName !== "allproducts") {
@@ -149,6 +149,59 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         const data = await response.json();
         await setStore({ colors: data });
+      },
+
+      addFavorite: async (favorite) => {
+        const store = getStore();
+
+        if (store.user.id) {
+          const token = sessionStorage.getItem("token");
+          const newFav = {
+            user_id: store.user.id,
+            product_id: favorite,
+            key: "product_id",
+          };
+
+          const response = await fetch(
+            process.env.BACKEND_URL + "/api/favorites",
+            {
+              method: "POST",
+              headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+              body: JSON.stringify(newFav),
+            }
+          );
+          if (response.ok) {
+            getActions().getUser();
+          }
+        }
+      },
+
+      deleteFavorite: async (id) => {
+        const token = sessionStorage.getItem("token");
+
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/favorites/" + id,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        );
+        if (response.ok) {
+          await getActions().getUser();
+        }
+      },
+
+      resetUser() {
+        setStore({ user: null });
+        sessionStorage.removeItem("token");
       },
     },
   };

@@ -27,7 +27,8 @@ def filter_products():
     size_ids = request.args.getlist('size_ids[]')
     color_ids = request.args.getlist('color_ids[]')
     in_stock = request.args.get('in_stock')
-
+    print('@@@@@@@@@@@@@@@@')
+    print(product_id)
     # Query the products based on the filter criteria
     query = Product.query
 
@@ -97,9 +98,10 @@ def create_user():
     user_already_exist = User.query.filter_by(email= body["email"]).first()
     if user_already_exist:
         return jsonify({"response": "Email already in use"}), 403
-    if body["user_name"] and body["email"] and body["password"]:
+    if body["name"] and body["email"] and body["password"]:
         user = User(
             name = body ["name"],
+            last_name = body["last_name"],
             email = body["email"],
             password = body["password"]
         )
