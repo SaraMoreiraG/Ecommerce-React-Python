@@ -50,8 +50,13 @@ export const ProductDetails = () => {
   const handleSizeClick = (index) => {
     setActiveSize(index);
   };
-  const handleQuantityClick = () => {
+  const handleQuantityPlus = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+  const handleQuantityLess = () => {
+    if (quantity > 0) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
   };
   const handleTermsPolicyClick = () => {
     setTermsPolicy(true);
@@ -100,7 +105,7 @@ export const ProductDetails = () => {
               <p>Availability: Lorem Ipsum</p>
 
               <h2 className="my-3">$ {productInfo.price}</h2>
-              {store.colors && store.colors.length > 0 ? (
+              {store.colors && store.colors.length > 0 && (
                 <>
                   <p className="fw-bold">Color: {activeColor}</p>
                   <div className="d-flex mb-3">
@@ -116,14 +121,6 @@ export const ProductDetails = () => {
                       </div>
                     ))}
                   </div>
-                </>
-              ) : (
-                <>
-                  {actions.getColors().then((colors) => (
-                    <>
-                      <p>Loading colors...</p>
-                    </>
-                  ))}
                 </>
               )}
 
@@ -146,17 +143,11 @@ export const ProductDetails = () => {
 
               <p className="fw-bold">Quantity: {quantity}</p>
               <div className="d-flex mb-3">
-                <p
-                  className={"size-text"}
-                  onClick={() => handleQuantityClick()}
-                >
+                <p className={"size-text"} onClick={() => handleQuantityLess()}>
                   -
                 </p>
                 <p className={"size-text"}>{quantity}</p>
-                <p
-                  className={"size-text"}
-                  onClick={() => handleQuantityClick()}
-                >
+                <p className={"size-text"} onClick={() => handleQuantityPlus()}>
                   +
                 </p>
               </div>
