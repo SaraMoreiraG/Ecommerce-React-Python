@@ -2,6 +2,7 @@
 .jumbotron-home {
   margin-top: 87px; /* Margin to push down the content below the fixed-top components */
   background-image: url("https://new-ella-demo.myshopify.com/cdn/shop/files/slideshow-1.jpg?v=1632195167&width=1880");
+  background-size: cover; /* Make the background image responsive */
   width: auto;
   height: 550px;
   text-align: justify;

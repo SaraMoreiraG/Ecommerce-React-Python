@@ -11,9 +11,6 @@ export const ProductDetails = () => {
 
   const [productInfo, setProductInfo] = useState(null);
 
-  console.log("Store", store.products);
-  console.log(productInfo);
-
   const [activeColor, setActiveColor] = useState(null);
   const sizes = ["XS", "S", "M", "L", "XL"];
   const [activeSize, setActiveSize] = useState(null);
@@ -103,37 +100,32 @@ export const ProductDetails = () => {
               <p>Availability: Lorem Ipsum</p>
 
               <h2 className="my-3">$ {productInfo.price}</h2>
-
-              <p className="fw-bold">Color: {activeColor}</p>
-              <div className="d-flex mb-3">
-                <div
-                  className={`circle ${activeColor === 0 ? "active" : ""}`}
-                  onClick={() => handleColorClick(0)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#609ea1" }}
-                  ></div>
-                </div>
-                <div
-                  className={`circle ${activeColor === 1 ? "active" : ""}`}
-                  onClick={() => handleColorClick(1)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#808080" }}
-                  ></div>
-                </div>
-                <div
-                  className={`circle ${activeColor === 2 ? "active" : ""}`}
-                  onClick={() => handleColorClick(2)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#ffc1cc" }}
-                  ></div>
-                </div>
-              </div>
+              {store.colors && store.colors.length > 0 ? (
+                <>
+                  <p className="fw-bold">Color: {activeColor}</p>
+                  <div className="d-flex mb-3">
+                    {store.colors.map((color) => (
+                      <div
+                        key={color.name}
+                        className={`circle ${
+                          activeColor === color.name ? "active" : ""
+                        }`}
+                        onClick={() => handleColorClick(color.name)}
+                      >
+                        <div className={`circle-color ${color.name}`}></div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {actions.getColors().then((colors) => (
+                    <>
+                      <p>Loading colors...</p>
+                    </>
+                  ))}
+                </>
+              )}
 
               <p className="fw-bold">
                 Size: {activeSize !== null ? sizes[activeSize] : ""}
