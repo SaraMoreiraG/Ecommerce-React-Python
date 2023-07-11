@@ -9,15 +9,16 @@ export const ProductDetails = () => {
   const { store, actions } = useContext(Context);
   const params = useParams();
 
-  const [productInfo, setProductInfo] = useState(null);
-
-  const [activeColor, setActiveColor] = useState(null);
   const sizes = ["XS", "S", "M", "L", "XL"];
-  const [activeSize, setActiveSize] = useState(null);
-  const [quantity, setQuantity] = useState(0);
-  const [termsPolicy, setTermsPolicy] = useState(false);
-
+  const [productInfo, setProductInfo] = useState(null);
   const [isFavorite, setIsFavorite] = useState();
+  const [newOrder, setNewOrder] = useState({
+    product_id: params.theid,
+    color: null,
+    size: null,
+    quantity: 0,
+    termsPolicy: false,
+  });
 
   useEffect(() => {
     const filters = {
@@ -33,6 +34,14 @@ export const ProductDetails = () => {
   }, [store.products]);
 
   useEffect(() => {
+    setNewOrder((prevOrder) => ({
+      ...prevOrder,
+      price: productInfo?.price ? productInfo.price * prevOrder.quantity : 0,
+    }));
+  }, [productInfo, newOrder.quantity]);
+
+  // ----- FAVORITE FUNCTION -----
+  useEffect(() => {
     if (store.user && store.user.favorites.length > 0) {
       store.user.favorites.map((favorite) => {
         if (favorite.product.id === store.products[0].id) {
@@ -43,25 +52,6 @@ export const ProductDetails = () => {
       });
     }
   }, [store.user]);
-
-  const handleColorClick = (index) => {
-    setActiveColor(index);
-  };
-  const handleSizeClick = (index) => {
-    setActiveSize(index);
-  };
-  const handleQuantityPlus = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-  const handleQuantityLess = () => {
-    if (quantity > 0) {
-      setQuantity((prevQuantity) => prevQuantity - 1);
-    }
-  };
-  const handleTermsPolicyClick = () => {
-    setTermsPolicy(true);
-    console.log(termsPolicy);
-  };
 
   return (
     <>
@@ -107,15 +97,20 @@ export const ProductDetails = () => {
               <h2 className="my-3">$ {productInfo.price}</h2>
               {store.colors && store.colors.length > 0 && (
                 <>
-                  <p className="fw-bold">Color: {activeColor}</p>
+                  <p className="fw-bold">Color: {newOrder.color}</p>
                   <div className="d-flex mb-3">
                     {store.colors.map((color) => (
                       <div
                         key={color.name}
                         className={`circle ${
-                          activeColor === color.name ? "active" : ""
+                          newOrder.color === color.name ? "active" : ""
                         }`}
-                        onClick={() => handleColorClick(color.name)}
+                        onClick={() =>
+                          setNewOrder((prevOrder) => ({
+                            ...prevOrder,
+                            color: color.name,
+                          }))
+                        }
                       >
                         <div className={`circle-color ${color.name}`}></div>
                       </div>
@@ -125,36 +120,75 @@ export const ProductDetails = () => {
               )}
 
               <p className="fw-bold">
-                Size: {activeSize !== null ? sizes[activeSize] : ""}
+                Size: {newOrder.size !== null ? newOrder.size : ""}
               </p>
               <div className="d-flex mb-3">
                 {sizes.map((size, index) => (
                   <p
                     key={index}
                     className={`size-text ${
-                      activeSize === index ? "active" : ""
+                      newOrder.size === size ? "active" : ""
                     }`}
-                    onClick={() => handleSizeClick(index)}
+                    onClick={() =>
+                      setNewOrder((prevOrder) => ({
+                        ...prevOrder,
+                        size: size,
+                      }))
+                    }
                   >
                     {size}
                   </p>
                 ))}
               </div>
 
-              <p className="fw-bold">Quantity: {quantity}</p>
+              <p className="fw-bold">Quantity: {newOrder.quantity}</p>
               <div className="d-flex mb-3">
-                <p className={"size-text"} onClick={() => handleQuantityLess()}>
+                <p
+                  className={"size-text"}
+                  onClick={() => {
+                    if (newOrder.quantity > 0) {
+                      setNewOrder((prevOrder) => ({
+                        ...prevOrder,
+                        quantity: prevOrder.quantity - 1,
+                        price: productInfo.price * prevOrder.quantity,
+                      }));
+                    }
+                  }}
+                >
                   -
                 </p>
-                <p className={"size-text"}>{quantity}</p>
-                <p className={"size-text"} onClick={() => handleQuantityPlus()}>
+                <p className={"size-text"}>{newOrder.quantity}</p>
+                <p
+                  className={"size-text"}
+                  onClick={() => {
+                    setNewOrder((prevOrder) => ({
+                      ...prevOrder,
+                      quantity: prevOrder.quantity + 1,
+                    }));
+                    setNewOrder((prevOrder) => ({
+                      ...prevOrder,
+                      price: productInfo.price * newOrder.quantity,
+                    }));
+                  }}
+                >
                   +
                 </p>
               </div>
 
               <div className="d-flex">
                 <div className="col-9">
-                  <p className="button-black">ADD TO CART</p>
+                  <p
+                    className="button-black"
+                    onClick={() => {
+                      const existingCart =
+                        JSON.parse(localStorage.getItem("cart")) || [];
+                      const updatedCart = [...existingCart, newOrder];
+                      localStorage.setItem("cart", JSON.stringify(updatedCart));
+                      actions.getCartFromStorage();
+                    }}
+                  >
+                    ADD TO CART
+                  </p>
                 </div>
                 <div className="col-2">
                   {/*************** FAVORITE HEART ********************/}
@@ -176,11 +210,16 @@ export const ProductDetails = () => {
               <div className="d-flex align-items-center">
                 <input
                   className={`form-check-input ${
-                    termsPolicy === true ? "checked" : ""
+                    newOrder.termsPolicy === true ? "checked" : ""
                   }`}
                   type="checkbox"
                   value="None"
-                  onClick={() => handleTermsPolicyClick()}
+                  onClick={() =>
+                    setNewOrder((prevOrder) => ({
+                      ...prevOrder,
+                      termsPolicy: true,
+                    }))
+                  }
                 />
                 <h5 className="fw-light ms-2 mb-0">
                   I agree withTerms & Conditions

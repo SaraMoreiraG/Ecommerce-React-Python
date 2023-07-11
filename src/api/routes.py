@@ -121,6 +121,33 @@ def login_user():
     else:
         return jsonify({"error": "Error with credentials"}), 403
 
+@api.route('/cart-item', methods=['POST'])
+@jwt_required()
+def add_cart_item():
+    user_id = get_jwt_identity()
+    product_id = request.json.get('product_id')
+    color = request.json.get('color')
+    size = request.json.get('size')
+    quantity = request.json.get('quantity')
+
+    if not product_id:
+        return jsonify(message='Product ID is required'), 400
+
+    product = Product.query.get(product_id)
+    if not product:
+        return jsonify(message='Product not found'), 404
+
+    favorite = Favorites.query.filter_by(user_id=user_id, product_id=product_id).first()
+    if favorite:
+        return jsonify(message='Favorite already exists'), 409
+
+    favorite = Favorites(user_id=user_id, product_id=product_id)
+    db.session.add(favorite)
+    db.session.commit()
+
+    return jsonify(message='Favorite created successfully'), 201
+
+
 @api.route('/favorites', methods=['POST'])
 @jwt_required()
 def create_favorite():
@@ -178,7 +205,6 @@ def create_collections():
     db.session.commit()
 
     return jsonify(created_collections), 201
-
 
 @api.route('/sizes', methods=['POST'])
 def create_sizes():
