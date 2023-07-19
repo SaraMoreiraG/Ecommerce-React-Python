@@ -29,14 +29,14 @@ export const Home = () => {
         </div>
       </div>
 
-      <div className="collections container d-flex pt-4">
+      <div className="collections container d-flex pt-4 px-0">
         {store.collections &&
           store.collections.map((item) => {
             const name = item.name.toUpperCase();
             return (
-              <div key={item.id} className="col-4 d-grid">
+              <div key={item.id} className="col-4 d-grid p-2">
                 <Link to={"/catalogue/" + item.name} className="zoom-img">
-                  <img src={item.img} />
+                  <img src={item.img} className="cover-image" />
                   <div className="text-img start-0 end-0 top-0 bottom-0">
                     <h4>{name}</h4>
                   </div>

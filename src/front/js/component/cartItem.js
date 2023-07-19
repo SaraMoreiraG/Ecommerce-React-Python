@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
 
-export const CartItem = () => {
+export const CartItem = ({ item, local, setSubTotal }) => {
+  const { actions } = useContext(Context);
+
+  useEffect(() => {
+    setSubTotal((prevSubTotal) => prevSubTotal + item.price);
+  }, []);
+
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantityClick = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
+
   return (
     <div className="d-flex">
       <div className="col-3">
@@ -22,20 +30,33 @@ export const CartItem = () => {
         <p className="card-description">
           Product description: Some quick example text to build.
         </p>
-        <p>Color / XL</p>
-        <h4 className="bold mb-3">$280</h4>
+        <p>
+          {item.color} / {item.size}
+        </p>
+        <h4 className="bold mb-3">${item.price}</h4>
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex">
             <p className={"size-text"} onClick={() => handleQuantityClick()}>
               -
             </p>
-            <p className={"size-text"}>{quantity}</p>
+            <p className={"size-text"}>{item.quantity}</p>
             <p className={"size-text"} onClick={() => handleQuantityClick()}>
               +
             </p>
           </div>
           <div className="">
-            <button type="button" className="btn-close"></button>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => {
+                const existingCart =
+                  JSON.parse(localStorage.getItem("cart")) || [];
+                existingCart.splice(local, 1);
+                localStorage.setItem("cart", JSON.stringify(existingCart));
+                actions.getCartFromStorage();
+                setSubTotal((prevSubTotal) => prevSubTotal - item.price);
+              }}
+            ></button>
           </div>
         </div>
       </div>

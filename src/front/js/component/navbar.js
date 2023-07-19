@@ -7,18 +7,24 @@ import { CartItem } from "./cartItem";
 
 export const Navbar = () => {
   const { store, actions } = useContext(Context);
-  const [isLogin, setIsLogin] = useState(false);
+
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
+
   const [login, setLogin] = useState({ email: "", password: "" });
-  const [cart, setCart] = useState();
+  const [isLogin, setIsLogin] = useState(false);
+
+  const [subTotal, setSubTotal] = useState(0);
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       setIsLogin(true);
     }
-    setCart(sessionStorage.getItem("cart"));
-  }, [isLogin, cart]);
-  console.log(sessionStorage.getItem("cart"));
+  }, [isLogin]);
+
+  useEffect(() => {
+    actions.getCartFromStorage();
+  }, []);
+
   const logInUser = async () => {
     const response = await fetch(process.env.BACKEND_URL + "/api/login", {
       method: "POST",
@@ -72,12 +78,25 @@ export const Navbar = () => {
               ></button>
             </div>
             <div className="offcanvas-body bg-primary pt-0">
-              <h5 className="fw-light py-3">0 items</h5>
-              <CartItem />
+              {store.cartFromStorage && (
+                <>
+                  <h5 className="fw-light py-3">
+                    {store.cartFromStorage.length} items
+                  </h5>
+                  <hr></hr>
+                  {store.cartFromStorage.map((item, index) => (
+                    <CartItem
+                      key={index}
+                      item={item}
+                      local={index}
+                      setSubTotal={setSubTotal}
+                    />
+                  ))}
+                </>
+              )}
+
               <hr></hr>
-              <CartItem />
-              <hr></hr>
-              <p>Subtotal:</p>
+              <p>Subtotal: {subTotal}$</p>
             </div>
           </div>
 

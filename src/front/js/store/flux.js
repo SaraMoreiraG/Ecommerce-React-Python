@@ -9,6 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       priceRange: null,
       colors: null,
       user: null,
+      cartFromStorage: null,
     },
     actions: {
       getUser: async () => {
@@ -149,6 +150,36 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         const data = await response.json();
         await setStore({ colors: data });
+      },
+
+      getCartFromStorage: () => {
+        const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+        setStore({ cartFromStorage: cartData });
+      },
+
+      addCartItem: async (item) => {
+        const newCartItem = {
+          product_id: item.product_id,
+          color: item.color,
+          size: item.size,
+          quantity: item.quantity,
+        };
+
+        const response = await fetch(
+          process.env.BACKEND_URL + "/api/cart-item",
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            body: JSON.stringify(newCartItem),
+          }
+        );
+        if (response.ok) {
+          getActions().getUser();
+        }
       },
 
       getColorsByIds: async (colorIds) => {
