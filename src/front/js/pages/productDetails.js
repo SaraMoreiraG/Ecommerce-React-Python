@@ -9,26 +9,12 @@ export const ProductDetails = () => {
   const { store, actions } = useContext(Context);
   const params = useParams();
 
-  const sizes = ["XS", "S", "M", "L", "XL"];
   const [productInfo, setProductInfo] = useState(null);
+  const [isFavorite, setIsFavorite] = useState();
 
   const [colors, setColors] = useState([]);
+  const sizes = ["XS", "S", "M", "L", "XL"];
 
-  const [selectedProduct, setSelectedProduct] = useState({
-    id: params.theid,
-    description: null,
-    color: null,
-    size: null,
-    quantity: 0,
-  });
-
-  const [activeColor, setActiveColor] = useState(null);
-  // const sizes = ["XS", "S", "M", "L", "XL"];
-  const [activeSize, setActiveSize] = useState(null);
-  const [quantity, setQuantity] = useState(0);
-  const [termsPolicy, setTermsPolicy] = useState(false);
-
-  const [isFavorite, setIsFavorite] = useState();
   const [newOrder, setNewOrder] = useState({
     product_id: params.theid,
     color: null,
@@ -50,13 +36,6 @@ export const ProductDetails = () => {
     }
   }, [store.products]);
 
-  useEffect(() => {
-    setNewOrder((prevOrder) => ({
-      ...prevOrder,
-      price: productInfo?.price ? productInfo.price * prevOrder.quantity : 0,
-    }));
-  }, [productInfo, newOrder.quantity]);
-
   // ----- FAVORITE FUNCTION -----
   useEffect(() => {
     if (store.user && store.user.favorites.length > 0) {
@@ -70,6 +49,7 @@ export const ProductDetails = () => {
     }
   }, [store.user]);
 
+  // ----- GETTING COLORS FROM STOCK -----
   useEffect(() => {
     if (productInfo) {
       const colorIdsList = productInfo.stock
@@ -79,35 +59,26 @@ export const ProductDetails = () => {
 
       const fetchColors = async () => {
         try {
-          const colorIdsArray = colorIdsList.split(","); // Convert comma-separated string to an array
+          const colorIdsArray = colorIdsList.split(",");
           const fetchedColors = await actions.getColorsByIds(colorIdsArray);
           setColors(fetchedColors);
         } catch (error) {
           console.error("Error fetching colors:", error);
-          // Handle errors if needed
         }
         console.log(colors);
       };
-
       fetchColors();
     }
   }, [productInfo]);
-  console.log(colors);
-  const handleSizeClick = (index) => {
-    setActiveSize(index);
-  };
-  const handleQuantityClick = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-  const handleTermsPolicyClick = () => {
-    setTermsPolicy(true);
-    console.log(termsPolicy);
-  };
 
-  const addToCart = () => {
-    console.log(selectedProduct);
-  };
-
+  // ----- CALCULATING NEW PRICE -----
+  useEffect(() => {
+    setNewOrder((prevOrder) => ({
+      ...prevOrder,
+      price: productInfo?.price ? productInfo.price * prevOrder.quantity : 0,
+    }));
+  }, [productInfo, newOrder.quantity]);
+  
   return (
     <>
       {productInfo ? (
@@ -151,18 +122,18 @@ export const ProductDetails = () => {
 
               <h2 className="my-3">$ {productInfo.price}</h2>
 
-              <p className="fw-bold">Color: {selectedProduct.color}</p>
+              <p className="fw-bold">Color: {newOrder.color}</p>
               <div className="d-flex mb-3">
                 {colors &&
                   colors.flat().map((color) => (
                     <div
                       key={color.id}
                       className={`circle ${
-                        selectedProduct.color === color.name ? "active" : ""
+                        newOrder.color === color.name ? "active" : ""
                       }`}
                       onClick={() =>
-                        setSelectedProduct((prevSelectedProduct) => ({
-                          ...prevSelectedProduct,
+                        setNewOrder((prevNewOrder) => ({
+                          ...prevNewOrder,
                           color: color.name,
                         }))
                       }
