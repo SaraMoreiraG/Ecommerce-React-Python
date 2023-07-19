@@ -84,6 +84,30 @@ def get_all_colors():
     colors = Color.query.all()
     return jsonify([color.serialize() for color in colors]), 200
 
+@api.route("/colors/<string:color_ids>", methods=["GET"])
+def get_colors_by_ids(color_ids):
+    try:
+        color_ids_list = color_ids.split(',')  # Split the comma-separated list of color IDs
+
+        # Fetch the colors based on the color IDs (assuming you have a Color model)
+        colors = Color.query.filter(Color.id.in_(color_ids_list)).all()
+
+        # If colors is None, it means one or more colors were not found
+        if not colors:
+            return jsonify(error="One or more colors not found"), 404
+
+        # Serialize the colors and return the response
+        serialized_colors = [color.serialize() for color in colors]
+        return jsonify(serialized_colors), 200
+
+    except Exception as e:
+        # Handle any errors that might occur during the API call
+        print("Error fetching colors:", e)
+        return jsonify(error="Internal Server Error"), 500
+
+
+
+
 @api.route('/user', methods=['GET'])
 @jwt_required()
 def get_user():

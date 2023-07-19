@@ -10,10 +10,17 @@ export const ProductDetails = () => {
   const params = useParams();
 
   const [productInfo, setProductInfo] = useState(null);
-
-  console.log("Store", store.products);
   console.log(productInfo);
 
+  const [colors, setColors] = useState([]);
+
+  const [selectedProduct, setSelectedProduct] = useState({
+    id: params.theid,
+    description: null,
+    color: null,
+    size: null,
+    quantity: 0,
+  });
   const [activeColor, setActiveColor] = useState(null);
   const sizes = ["XS", "S", "M", "L", "XL"];
   const [activeSize, setActiveSize] = useState(null);
@@ -47,8 +54,36 @@ export const ProductDetails = () => {
     }
   }, [store.user]);
 
+  useEffect(() => {
+    if (productInfo) {
+      const colorIdsList = productInfo.stock
+        .map((colorObject) => colorObject.color_id)
+        .join(",");
+      console.log(colorIdsList);
+
+      const fetchColors = async () => {
+        try {
+          const colorIdsArray = colorIdsList.split(","); // Convert comma-separated string to an array
+          const fetchedColors = await actions.getColorsByIds(colorIdsArray);
+          setColors(fetchedColors);
+        } catch (error) {
+          console.error("Error fetching colors:", error);
+          // Handle errors if needed
+        }
+        console.log(colors);
+      };
+
+      fetchColors();
+    }
+  }, [productInfo]);
+  console.log(colors);
+
   const handleColorClick = (index) => {
     setActiveColor(index);
+    setSelectedProduct((prevSelectedProduct) => ({
+      ...prevSelectedProduct,
+      color: index,
+    }));
   };
   const handleSizeClick = (index) => {
     setActiveSize(index);
@@ -59,6 +94,10 @@ export const ProductDetails = () => {
   const handleTermsPolicyClick = () => {
     setTermsPolicy(true);
     console.log(termsPolicy);
+  };
+
+  const addToCart = () => {
+    console.log(selectedProduct);
   };
 
   return (
@@ -104,35 +143,28 @@ export const ProductDetails = () => {
 
               <h2 className="my-3">$ {productInfo.price}</h2>
 
-              <p className="fw-bold">Color: {activeColor}</p>
+              <p className="fw-bold">Color: {selectedProduct.color}</p>
               <div className="d-flex mb-3">
-                <div
-                  className={`circle ${activeColor === 0 ? "active" : ""}`}
-                  onClick={() => handleColorClick(0)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#609ea1" }}
-                  ></div>
-                </div>
-                <div
-                  className={`circle ${activeColor === 1 ? "active" : ""}`}
-                  onClick={() => handleColorClick(1)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#808080" }}
-                  ></div>
-                </div>
-                <div
-                  className={`circle ${activeColor === 2 ? "active" : ""}`}
-                  onClick={() => handleColorClick(2)}
-                >
-                  <div
-                    className="circle-color"
-                    style={{ backgroundColor: "#ffc1cc" }}
-                  ></div>
-                </div>
+                {colors &&
+                  colors.flat().map((color) => (
+                    <div
+                      key={color.id}
+                      className={`circle ${
+                        selectedProduct.color === color.name ? "active" : ""
+                      }`}
+                      onClick={() =>
+                        setSelectedProduct((prevSelectedProduct) => ({
+                          ...prevSelectedProduct,
+                          color: color.name,
+                        }))
+                      }
+                    >
+                      <div
+                        className="circle-color"
+                        style={{ backgroundColor: color.rgb }}
+                      ></div>
+                    </div>
+                  ))}
               </div>
 
               <p className="fw-bold">
@@ -171,7 +203,9 @@ export const ProductDetails = () => {
 
               <div className="d-flex">
                 <div className="col-9">
-                  <p className="button-black">ADD TO CART</p>
+                  <p className="button-black" onClick={() => addToCart()}>
+                    ADD TO CART
+                  </p>
                 </div>
                 <div className="col-2">
                   {/*************** FAVORITE HEART ********************/}

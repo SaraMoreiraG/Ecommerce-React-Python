@@ -151,6 +151,36 @@ const getState = ({ getStore, getActions, setStore }) => {
         await setStore({ colors: data });
       },
 
+      getColorsByIds: async (colorIds) => {
+        try {
+          const colorPromises = colorIds.map(async (colorId) => {
+            const response = await fetch(process.env.BACKEND_URL + "/api/colors/" + colorId, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+      
+            if (!response.ok) {
+              // Handle the case where the color with the given ID was not found
+              // For example, you can return null or throw an error
+              return null;
+            }
+      
+            const data = await response.json();
+            return data;
+          });
+      
+          const colors = await Promise.all(colorPromises);
+          return colors;
+        } catch (error) {
+          // Handle any errors that might occur during the API calls
+          // For example, you can log the error or throw a custom error
+          console.error("Error fetching colors:", error);
+          throw error;
+        }
+      },
+      
       addFavorite: async (favorite) => {
         const store = getStore();
 

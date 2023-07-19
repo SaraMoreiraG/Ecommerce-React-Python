@@ -10,13 +10,15 @@ export const Navbar = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false);
   const [login, setLogin] = useState({ email: "", password: "" });
+  const [cart, setCart] = useState();
 
   useEffect(() => {
     if (sessionStorage.getItem("token")) {
       setIsLogin(true);
     }
-  }, [isLogin]);
-
+    setCart(sessionStorage.getItem("cart"));
+  }, [isLogin, cart]);
+  console.log(sessionStorage.getItem("cart"));
   const logInUser = async () => {
     const response = await fetch(process.env.BACKEND_URL + "/api/login", {
       method: "POST",
