@@ -152,6 +152,72 @@ const getState = ({ getStore, getActions, setStore }) => {
         await setStore({ colors: data });
       },
 
+      getColorsByIds: async (colorIds) => {
+        try {
+          const colorPromises = colorIds.map(async (colorId) => {
+            const response = await fetch(
+              process.env.BACKEND_URL + "/api/colors/" + colorId,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) {
+              // Handle the case where the color with the given ID was not found
+              // For example, you can return null or throw an error
+              return null;
+            }
+
+            const data = await response.json();
+            return data;
+          });
+
+          const colors = await Promise.all(colorPromises);
+          return colors;
+        } catch (error) {
+          // Handle any errors that might occur during the API calls
+          // For example, you can log the error or throw a custom error
+          console.error("Error fetching colors:", error);
+          throw error;
+        }
+      },
+
+      getSizesByIds: async (sizeIds) => {
+        try {
+          const sizePromises = sizeIds.map(async (sizeId) => {
+            const response = await fetch(
+              process.env.BACKEND_URL + "/api/sizes/" + sizeId,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+
+            if (!response.ok) {
+              return null;
+            }
+
+            const data = await response.json();
+            return data; // Return the entire data object
+          });
+
+          const sizesData = await Promise.all(sizePromises);
+
+          // Flatten the array of arrays and get an array of size names
+          const sizes = sizesData.flat().map((sizeData) => sizeData.name);
+
+          return sizes; // Return the array of size names
+        } catch (error) {
+          console.error("Error fetching sizes:", error);
+          throw error;
+        }
+      },
+
       getCartFromStorage: () => {
         const cartData = JSON.parse(localStorage.getItem("cart")) || [];
         setStore({ cartFromStorage: cartData });
@@ -182,36 +248,6 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      getColorsByIds: async (colorIds) => {
-        try {
-          const colorPromises = colorIds.map(async (colorId) => {
-            const response = await fetch(process.env.BACKEND_URL + "/api/colors/" + colorId, {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-      
-            if (!response.ok) {
-              // Handle the case where the color with the given ID was not found
-              // For example, you can return null or throw an error
-              return null;
-            }
-      
-            const data = await response.json();
-            return data;
-          });
-      
-          const colors = await Promise.all(colorPromises);
-          return colors;
-        } catch (error) {
-          // Handle any errors that might occur during the API calls
-          // For example, you can log the error or throw a custom error
-          console.error("Error fetching colors:", error);
-          throw error;
-        }
-      },
-      
       addFavorite: async (favorite) => {
         const store = getStore();
 
