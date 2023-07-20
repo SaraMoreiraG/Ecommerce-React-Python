@@ -89,7 +89,7 @@ def get_colors_by_ids(color_ids):
     try:
         color_ids_list = color_ids.split(',')  # Split the comma-separated list of color IDs
 
-        # Fetch the colors based on the color IDs (assuming you have a Color model)
+        # Fetch the colors based on the color IDs
         colors = Color.query.filter(Color.id.in_(color_ids_list)).all()
 
         # If colors is None, it means one or more colors were not found
@@ -105,8 +105,27 @@ def get_colors_by_ids(color_ids):
         print("Error fetching colors:", e)
         return jsonify(error="Internal Server Error"), 500
 
+@api.route("/sizes/<string:color_ids>", methods=["GET"])
+def get_sizes_by_ids(color_ids):
+    try:
+        size_ids_str = color_ids
+        if size_ids_str is None:
+            return jsonify(error="Size IDs not provided"), 400
 
+        size_ids = [int(size_id) for size_id in size_ids_str.split(",")]
+        sizes = Size.query.filter(Size.id.in_(size_ids)).all()
 
+        # If sizes is None, it means one or more sizes were not found
+        if not sizes:
+            return jsonify(error="One or more sizes not found"), 404
+
+        serialized_sizes = [size.serialize() for size in sizes]
+        return jsonify(serialized_sizes), 200
+
+    except Exception as e:
+        # Handle any errors that might occur during the API call
+        print("Error fetching sizes:", e)
+        return jsonify(error="Internal Server Error"), 500
 
 @api.route('/user', methods=['GET'])
 @jwt_required()
