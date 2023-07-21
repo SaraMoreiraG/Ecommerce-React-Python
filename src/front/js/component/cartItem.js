@@ -5,14 +5,18 @@ import { Context } from "../store/appContext";
 export const CartItem = ({ item, local, setSubTotal }) => {
   const { actions } = useContext(Context);
 
+  const [quantity, setQuantity] = useState(item.quantity);
+
   useEffect(() => {
-    setSubTotal((prevSubTotal) => prevSubTotal + item.price);
+    setSubTotal((prevSubTotal) => prevSubTotal + item.price * quantity);
   }, []);
 
-  const [quantity, setQuantity] = useState(0);
-
-  const handleQuantityClick = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+  const handleQuantityClick = (change) => {
+    const newQuantity = quantity + change;
+    if (newQuantity >= 0) {
+      setQuantity(newQuantity);
+      setSubTotal((prevSubTotal) => prevSubTotal + item.price * change);
+    }
   };
 
   return (
@@ -33,14 +37,14 @@ export const CartItem = ({ item, local, setSubTotal }) => {
         <p>
           {item.color} / {item.size}
         </p>
-        <h4 className="bold mb-3">${item.price}</h4>
+        <h4 className="bold mb-3">${item.price * quantity}</h4>
         <div className="d-flex justify-content-between align-items-center">
           <div className="d-flex">
-            <p className={"size-text"} onClick={() => handleQuantityClick()}>
+            <p className={"size-text"} onClick={() => handleQuantityClick(-1)}>
               -
             </p>
-            <p className={"size-text"}>{item.quantity}</p>
-            <p className={"size-text"} onClick={() => handleQuantityClick()}>
+            <p className={"size-text"}>{quantity}</p>
+            <p className={"size-text"} onClick={() => handleQuantityClick(1)}>
               +
             </p>
           </div>
