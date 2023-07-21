@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 import "../../styles/productDetails.css";
@@ -11,19 +11,21 @@ import SizeOptions from "../component/sizeOptions";
 export const ProductDetails = () => {
   const { store, actions } = useContext(Context);
   const params = useParams();
-
   // State variables
   const [productInfo, setProductInfo] = useState(null);
   const [isFavorite, setIsFavorite] = useState();
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [newOrder, setNewOrder] = useState({
-    product_id: params.theid,
+    id: params.theid,
     color: null,
     size: null,
     quantity: 0,
+    price: null,
+    description: null,
     termsPolicy: false,
   });
+  const [showMessage, setShowMessage] = useState(false);
 
   // Fetch colors by IDs
   const fetchColors = async (colorIds) => {
@@ -70,25 +72,24 @@ export const ProductDetails = () => {
     }
   }, [store.user]);
 
-  // Fetch product sizes and colors
+  // Fetch product sizes and colors and get price
   useEffect(() => {
     if (productInfo) {
       const colorIdsList = productInfo.stock.map((item) => item.color_id);
       const sizeIdsList = productInfo.stock.map((item) => item.size_id);
+
+      setNewOrder((prevOrder) => ({
+        ...prevOrder,
+        price: productInfo.price,
+        description: productInfo.description,
+        img: productInfo.img,
+      }));
 
       // Fetch colors and sizes
       fetchColors(colorIdsList);
       fetchSizes(sizeIdsList);
     }
   }, [productInfo]);
-
-  // Calculate new price when productInfo or quantity change
-  useEffect(() => {
-    setNewOrder((prevOrder) => ({
-      ...prevOrder,
-      price: productInfo?.price ? productInfo.price * prevOrder.quantity : 0,
-    }));
-  }, [productInfo, newOrder.quantity]);
 
   // Handle color selection
   const handleColorSelect = (color) => {
@@ -112,7 +113,6 @@ export const ProductDetails = () => {
       setNewOrder((prevOrder) => ({
         ...prevOrder,
         quantity: prevOrder.quantity + change,
-        price: productInfo.price * (prevOrder.quantity + change),
       }));
     }
   };
@@ -131,7 +131,7 @@ export const ProductDetails = () => {
         <div className="product-detail container">
           <div className="row">
             <div className="link-tree pt-4 ms-2">
-              <p>home - {params.theid}</p>
+              <p>home - {productInfo.name}</p>
             </div>
           </div>
 
@@ -236,7 +236,23 @@ export const ProductDetails = () => {
                   I agree withTerms & Conditions
                 </h5>
               </div>
-              <p className="button-black blue my-3">BUY</p>
+
+              <p
+                className={`my-3 ${
+                  newOrder.termsPolicy === true
+                    ? "button-blue-dark"
+                    : "button-blue"
+                }`}
+                onClick={() => setShowMessage(true)}
+              >
+                BUY
+              </p>
+              {showMessage && !newOrder.termsPolicy && (
+                <p className="mandatory">*You must accept terms and policy</p>
+              )}
+              {showMessage && newOrder.termsPolicy && (
+                <p>Payment not available yet</p>
+              )}
             </div>
           </div>
         </div>
@@ -245,8 +261,4 @@ export const ProductDetails = () => {
       )}
     </>
   );
-};
-
-ProductDetails.propTypes = {
-  match: PropTypes.object,
 };

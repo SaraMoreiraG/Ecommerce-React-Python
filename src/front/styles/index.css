@@ -113,7 +113,9 @@ a:-webkit-any-link {
   cursor: pointer;
 }
 .button-black,
-.button-white {
+.button-white,
+.button-blue,
+.button-blue-dark {
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -128,15 +130,23 @@ a:-webkit-any-link {
   border: #000 1px solid;
   color: #fff;
 }
+.button-black:hover {
+  background-color: #fff;
+  border: #000 1px solid;
+  color: #000;
+}
 .button-white {
   background-color: #fff;
   border: #000 1px solid;
   color: #000;
 }
-.button-black:hover {
-  background-color: #fff;
-  border: #000 1px solid;
-  color: #000;
+.button-blue {
+  background-color: #8a74c7;
+  color: #fff;
+}
+.button-blue-dark {
+  background-color: #7652dc;
+  color: #fff;
 }
 i.fa-heart {
   font-size: 24px;
