@@ -11,18 +11,18 @@ import SizeOptions from "../component/sizeOptions";
 export const ProductDetails = () => {
   const { store, actions } = useContext(Context);
   const params = useParams();
-
   // State variables
   const [productInfo, setProductInfo] = useState(null);
   const [isFavorite, setIsFavorite] = useState();
   const [colors, setColors] = useState([]);
   const [sizes, setSizes] = useState([]);
   const [newOrder, setNewOrder] = useState({
-    product_id: params.theid,
+    id: params.theid,
     color: null,
     size: null,
     quantity: 0,
     price: null,
+    description: null,
     termsPolicy: false,
   });
   const [showMessage, setShowMessage] = useState(false);
@@ -81,6 +81,8 @@ export const ProductDetails = () => {
       setNewOrder((prevOrder) => ({
         ...prevOrder,
         price: productInfo.price,
+        description: productInfo.description,
+        img: productInfo.img,
       }));
 
       // Fetch colors and sizes
