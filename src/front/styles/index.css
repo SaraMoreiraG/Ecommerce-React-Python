@@ -81,6 +81,25 @@ hr {
     top: 56px;
   }
 }
+/* Hide the h5 element inside the button when screen is less than 992px */
+.login {
+  display: none;
+}
+@media (max-width: 991.98px) {
+  .btn .responsive {
+    display: none;
+  }
+  .login {
+    display: inline;
+  }
+}
+
+/* Show the h5 element inside the button when screen is 992px or larger */
+@media (min-width: 992px) {
+  .btn .h5-responsive {
+    display: block;
+  }
+}
 nav .btn {
   display: flex;
   align-items: center;
