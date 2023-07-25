@@ -77,7 +77,12 @@ export const SignInOffcanvas = ({ setIsLogin }) => {
         </h5>
         <div className="col-12 py-3">
           <Link to="/register">
-            <p className="button-white">CREATE AN ACCOUNT</p>
+            <p
+              className="button-white"
+              onClick={() => setIsOffcanvasOpen(false)}
+            >
+              CREATE AN ACCOUNT
+            </p>
           </Link>
         </div>
       </div>
