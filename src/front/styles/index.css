@@ -112,7 +112,7 @@ a:-webkit-any-link {
 /* Media query for screens smaller than 992 pixels */
 @media (max-width: 991.98px) {
   .container {
-    max-width: 100%;
+    max-width: 95%;
     padding: 0;
   }
 }
