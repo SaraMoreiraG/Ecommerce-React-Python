@@ -23,7 +23,6 @@ export const Register = () => {
       body: JSON.stringify(userInfo),
     });
     if (response.ok) {
-      
       console.log(response);
     }
   };
@@ -35,7 +34,7 @@ export const Register = () => {
           <p>home - creat account</p>
         </div>
       </div>
-      <div className="row">
+      <div className="row justify-content-between">
         <div className="col-4 p-0 text-">
           <h3 className="py-3">CREATE ACCOUNT</h3>
           <p className="pb-3 fw-light">
@@ -84,6 +83,12 @@ export const Register = () => {
               CREATE AN ACCOUNT
             </p>
           </div>
+        </div>
+        <div className="col-7">
+          <img
+            className="cover-image"
+            src="https://cdn.shopify.com/s/files/1/0081/3305/0458/files/blog-details-lager-1.jpg?v=1646119289"
+          />
         </div>
       </div>
     </div>
