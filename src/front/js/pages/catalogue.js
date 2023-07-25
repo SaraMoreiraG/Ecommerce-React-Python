@@ -93,12 +93,12 @@ export const Catalogue = (props) => {
     <div className="catalogue container">
       <div className="row m-0">
         <div className="link-tree pt-4 ms-2 mb-3">
-          <p>home - collection</p>
+          <p>home - {params.theid}</p>
         </div>
       </div>
 
       <div className="row justify-content-between m-0">
-        <div className="search-bar col-2">
+        <div className="search-bar col-md-3 col-sm-4">
           <div className="categories mb-5">
             <div className="d-flex justify-content-between">
               <h5>CATEGORIES</h5>
@@ -263,7 +263,7 @@ export const Catalogue = (props) => {
           </div>
         </div>
 
-        <div className="col-10 p-0 ps-3 m-0">
+        <div className="col-md-9 col-sm-8 p-0 ps-3 m-0">
           <div className="row m-0 p-0">
             <img
               className="p-0"
