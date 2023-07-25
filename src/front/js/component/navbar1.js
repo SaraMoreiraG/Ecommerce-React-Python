@@ -1,21 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Context } from "../store/appContext";
 
 import { OffCanvasCart } from "./offCanvasCart";
 import { SignInOffcanvas } from "./signInOffcanvas";
 
-export const Navbar1 = () => {
-  const { actions } = useContext(Context);
-
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    if (sessionStorage.getItem("token")) {
-      setIsLogin(true);
-    }
-  }, [isLogin]);
-
+export const Navbar1 = ({ store, actions, isLogin, setIsLogin }) => {
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container">
