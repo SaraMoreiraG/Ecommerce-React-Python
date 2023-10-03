@@ -55,6 +55,11 @@ hr {
   width: 100%;
   z-index: 100;
 }
+@media (max-width: 991.98px) {
+  .navbar-brand {
+    font-size: 28px;
+  }
+}
 .favorites,
 .register,
 .catalogue,
@@ -65,22 +70,22 @@ hr {
 
 .jumbotron-nav-bar {
   position: fixed;
+  display: flex;
+  justify-content: center;
   top: 0;
   width: 100%;
   z-index: 99;
-  margin-top: 50px;
-  background-color: #000;
+  margin-top: 45px;
+  padding-top: 8px;
+  background-color: #fff;
 }
-.mandatory {
-  color: red;
-}
-/* Media queries for responsiveness in navbar */
 @media (max-width: 768px) {
   .jumbotron-nav-bar {
     margin-top: 0;
     top: 56px;
   }
 }
+
 nav .btn {
   display: flex;
   align-items: center;
@@ -95,7 +100,6 @@ nav h5 {
 }
 a:-webkit-any-link {
   text-decoration: none;
-  color: white;
   cursor: pointer;
 }
 /********* MAIN RULES ********/
@@ -103,17 +107,27 @@ a:-webkit-any-link {
   text-decoration-line: underline;
 }
 .container {
-  padding-left: 80px;
-  padding-right: 80px;
+  max-width: 85%;
+}
+/* Media query for screens smaller than 992 pixels */
+@media (max-width: 991.98px) {
+  .container {
+    max-width: 95%;
+    padding: 0;
+  }
 }
 .row {
   margin: 0;
 }
+
+/* BUTTONS */
 .button {
   cursor: pointer;
 }
 .button-black,
-.button-white {
+.button-white,
+.button-blue,
+.button-blue-dark {
   text-align: center;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -128,22 +142,26 @@ a:-webkit-any-link {
   border: #000 1px solid;
   color: #fff;
 }
-.button-white {
-  background-color: #fff;
-  border: #000 1px solid;
-  color: #000;
-}
 .button-black:hover {
   background-color: #fff;
   border: #000 1px solid;
   color: #000;
 }
-i.fa-heart {
-  font-size: 24px;
+.button-white {
+  background-color: #fff;
+  border: #000 1px solid;
   color: #000;
-  transition: transform 0.5s ease;
-  transform: translateX(15%);
 }
+.button-blue {
+  background-color: #8a74c7;
+  color: #fff;
+}
+.button-blue-dark {
+  background-color: #7652dc;
+  color: #fff;
+}
+
+/* INPUTS */
 .form-check-input {
   background-color: #fff !important;
   color: #000;
@@ -158,7 +176,19 @@ i.fa-heart {
 .form-check-input.checked {
   background-color: #000 !important;
 }
-/* CIRCLE COLORS */
+/* COLORS */
+.white {
+  color: #fff;
+}
+.black {
+  color: #000;
+}
+.bg-black {
+  color: #000;
+}
+.mandatory {
+  color: red;
+}
 .blue {
   background-color: #609ea1 !important;
 }
@@ -168,6 +198,7 @@ i.fa-heart {
 .pink {
   background-color: #ffc1cc;
 }
+
 .circle {
   width: 40px;
   height: 40px;
@@ -192,10 +223,19 @@ i.fa-heart {
 .fa-heart {
   cursor: pointer;
 }
-.fa-heart:hover {
+i.fa-heart {
+  font-size: 24px;
+  color: #000;
+  transition: transform 0.5s ease;
+  transform: translateX(15%);
+}
+.fa-heart .big:hover {
   font-size: 28px;
 }
-
+.fa-brands {
+  font-size: 34px;
+}
+/* IMAGES */
 .cover-image {
   width: 100%;
   height: 100%;

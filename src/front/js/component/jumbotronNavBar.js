@@ -1,61 +1,78 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-export const JumbotronNavBar = () => (
-  <div className="jumbotron-nav-bar">
-    <div className="container">
-      <p className="d-flex justify-items-start m-0 p-0">
-        <button
-          className="btn text-light ps-0"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#collections"
-          aria-expanded="false"
-          aria-controls="collections"
-        >
-          Collections
-        </button>
-        <button
-          className="btn text-light"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#about"
-          aria-expanded="false"
-          aria-controls="about"
-        >
-          About us
-        </button>
-        <button
-          className="btn text-light"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#follow"
-          aria-expanded="false"
-          aria-controls="follow"
-        >
-          Follow us in social media
-        </button>
-      </p>
-      <div className="collapse p-3 " id="collections">
-        <div className="card card-body">
-          Some placeholder content for the collapse component. This panel is
-          hidden by default but revealed when the user activates the relevant
-          trigger.
+export const JumbotronNavBar = () => {
+  const [openCollapsible, setOpenCollapsible] = useState(null);
+
+  const handleButtonClick = (collapsibleId) => {
+    if (openCollapsible === collapsibleId) {
+      // If the clicked button is already open, close it
+      setOpenCollapsible(null);
+    } else {
+      // If the clicked button is closed, open it and close the rest
+      setOpenCollapsible(collapsibleId);
+    }
+  };
+
+  return (
+    <div className="jumbotron-nav-bar bg-black">
+      <div className="container p-0 m-0">
+        <div className="d-flex justify-content-end m-0 p-0">
+          <button
+            className={`btn text-light${
+              openCollapsible === "about" ? " active" : ""
+            }`}
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#about"
+            aria-expanded={openCollapsible === "about"}
+            aria-controls="about"
+            onMouseEnter={() => handleButtonClick("about")}
+            onMouseLeave={() => handleButtonClick("null")}
+          >
+            About us
+          </button>
+          <button
+            className={`btn text-light${
+              openCollapsible === "follow" ? " active" : ""
+            }`}
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#follow"
+            aria-expanded={openCollapsible === "follow"}
+            aria-controls="follow"
+            onMouseEnter={() => handleButtonClick("follow")}
+            onMouseLeave={() => handleButtonClick("null")}
+          >
+            Follow us in social media
+          </button>
         </div>
-      </div>
-      <div className="collapse p-3 " id="about">
-        <div className="card card-body">
-          Some placeholder content for the collapse component. This panel is
-          hidden by default but revealed when the user activates the relevant
-          trigger.
+        <div
+          className={`collapse p-3${
+            openCollapsible === "about" ? " show" : ""
+          }`}
+          id="about"
+        >
+          <div className="card card-body">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </div>
         </div>
-      </div>
-      <div className="collapse p-3 " id="follow">
-        <div className="card card-body">
-          Some placeholder content for the collapse component. This panel is
-          hidden by default but revealed when the user activates the relevant
-          trigger.
+        <div
+          className={`collapse p-3${
+            openCollapsible === "follow" ? " show" : ""
+          }`}
+          id="follow"
+          onMouseEnter={() => handleButtonClick("follow")}
+          onMouseLeave={() => handleButtonClick("null")}
+        >
+          <div className="card card-body">
+            <i className="fa-brands fa-instagram"></i>
+            @MakeYourOwnWebsite
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};

@@ -1,42 +1,53 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 import "../../styles/productDetails.css";
 
+import ColorOptions from "../component/colorOptions";
+import SizeOptions from "../component/sizeOptions";
+
 export const ProductDetails = () => {
   const { store, actions } = useContext(Context);
   const params = useParams();
-
-  const sizes = ["XS", "S", "M", "L", "XL"];
+  // State variables
   const [productInfo, setProductInfo] = useState(null);
-
-  const [colors, setColors] = useState([]);
-
-  const [selectedProduct, setSelectedProduct] = useState({
-    id: params.theid,
-    description: null,
-    color: null,
-    size: null,
-    quantity: 0,
-  });
-
-  const [activeColor, setActiveColor] = useState(null);
-  // const sizes = ["XS", "S", "M", "L", "XL"];
-  const [activeSize, setActiveSize] = useState(null);
-  const [quantity, setQuantity] = useState(0);
-  const [termsPolicy, setTermsPolicy] = useState(false);
-
   const [isFavorite, setIsFavorite] = useState();
+  const [colors, setColors] = useState([]);
+  const [sizes, setSizes] = useState([]);
   const [newOrder, setNewOrder] = useState({
-    product_id: params.theid,
+    id: params.theid,
     color: null,
     size: null,
     quantity: 0,
+    price: null,
+    description: null,
     termsPolicy: false,
   });
+  const [showMessage, setShowMessage] = useState(false);
 
+  // Fetch colors by IDs
+  const fetchColors = async (colorIds) => {
+    try {
+      const fetchedColors = await actions.getColorsByIds(colorIds);
+      setColors(fetchedColors);
+    } catch (error) {
+      console.error("Error fetching colors:", error);
+    }
+  };
+
+  // Fetch sizes by IDs
+  const fetchSizes = async (sizeIds) => {
+    try {
+      const fetchedSizes = await actions.getSizesByIds(sizeIds);
+      setSizes(fetchedSizes);
+    } catch (error) {
+      console.error("Error fetching sizes:", error);
+    }
+  };
+
+  // Fetch product data on mount
   useEffect(() => {
     const filters = {
       product_id: params.theid,
@@ -44,68 +55,74 @@ export const ProductDetails = () => {
     actions.getProducts(filters);
   }, []);
 
+  // Update productInfo when store.products change
   useEffect(() => {
     if (store.products && store.products.length > 0) {
       setProductInfo(store.products[0]);
     }
   }, [store.products]);
 
-  useEffect(() => {
-    setNewOrder((prevOrder) => ({
-      ...prevOrder,
-      price: productInfo?.price ? productInfo.price * prevOrder.quantity : 0,
-    }));
-  }, [productInfo, newOrder.quantity]);
-
-  // ----- FAVORITE FUNCTION -----
+  // Check if the product is in user's favorites
   useEffect(() => {
     if (store.user && store.user.favorites.length > 0) {
-      store.user.favorites.map((favorite) => {
-        if (favorite.product.id === store.products[0].id) {
-          setIsFavorite(true);
-        } else {
-          setIsFavorite(false);
-        }
-      });
+      const isProductFavorite = store.user.favorites.some(
+        (favorite) => favorite.product.id === store.products[0].id
+      );
+      setIsFavorite(isProductFavorite);
     }
   }, [store.user]);
 
+  // Fetch product sizes and colors and get price
   useEffect(() => {
     if (productInfo) {
-      const colorIdsList = productInfo.stock
-        .map((colorObject) => colorObject.color_id)
-        .join(",");
-      console.log(colorIdsList);
+      const colorIdsList = productInfo.stock.map((item) => item.color_id);
+      const sizeIdsList = productInfo.stock.map((item) => item.size_id);
 
-      const fetchColors = async () => {
-        try {
-          const colorIdsArray = colorIdsList.split(","); // Convert comma-separated string to an array
-          const fetchedColors = await actions.getColorsByIds(colorIdsArray);
-          setColors(fetchedColors);
-        } catch (error) {
-          console.error("Error fetching colors:", error);
-          // Handle errors if needed
-        }
-        console.log(colors);
-      };
+      setNewOrder((prevOrder) => ({
+        ...prevOrder,
+        price: productInfo.price,
+        description: productInfo.description,
+        img: productInfo.img,
+      }));
 
-      fetchColors();
+      // Fetch colors and sizes
+      fetchColors(colorIdsList);
+      fetchSizes(sizeIdsList);
     }
   }, [productInfo]);
-  console.log(colors);
-  const handleSizeClick = (index) => {
-    setActiveSize(index);
-  };
-  const handleQuantityClick = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
-  };
-  const handleTermsPolicyClick = () => {
-    setTermsPolicy(true);
-    console.log(termsPolicy);
+
+  // Handle color selection
+  const handleColorSelect = (color) => {
+    setNewOrder((prevNewOrder) => ({
+      ...prevNewOrder,
+      color: color,
+    }));
   };
 
-  const addToCart = () => {
-    console.log(selectedProduct);
+  // Handle size selection
+  const handleSizeSelect = (size) => {
+    setNewOrder((prevOrder) => ({
+      ...prevOrder,
+      size: size,
+    }));
+  };
+
+  // Handle quantity change
+  const handleQuantityChange = (change) => {
+    if (newOrder.quantity + change >= 0) {
+      setNewOrder((prevOrder) => ({
+        ...prevOrder,
+        quantity: prevOrder.quantity + change,
+      }));
+    }
+  };
+
+  // Handle add to cart
+  const handleAddToCart = () => {
+    const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const updatedCart = [...existingCart, newOrder];
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    actions.getCartFromStorage();
   };
 
   return (
@@ -114,22 +131,15 @@ export const ProductDetails = () => {
         <div className="product-detail container">
           <div className="row">
             <div className="link-tree pt-4 ms-2">
-              <p>home - {params.theid}</p>
+              <p>home - {productInfo.name}</p>
             </div>
           </div>
 
           <div className="row pt-3 g-0">
             <div className="col-md-7">
               <div className="foto pe-2">
-                <img
-                  src="https://new-ella-demo.myshopify.com/cdn/shop/products/image16xxl_fc9c3985-7db2-4101-b11a-49cd512ce9bc.jpg?v=1658136572"
-                  className="img-fluid"
-                  alt="..."
-                />
+                <img src={productInfo.img} className="img-fluid" />
               </div>
-              {/* <div className="row">
-            <div className="more-fotos bg-success p-0">MORE FOTOS</div>
-          </div> */}
             </div>
             <div className="col-md-5 ps-5">
               <h2>{productInfo.name}</h2>
@@ -151,81 +161,34 @@ export const ProductDetails = () => {
 
               <h2 className="my-3">$ {productInfo.price}</h2>
 
-              <p className="fw-bold">Color: {selectedProduct.color}</p>
-              <div className="d-flex mb-3">
-                {colors &&
-                  colors.flat().map((color) => (
-                    <div
-                      key={color.id}
-                      className={`circle ${
-                        selectedProduct.color === color.name ? "active" : ""
-                      }`}
-                      onClick={() =>
-                        setSelectedProduct((prevSelectedProduct) => ({
-                          ...prevSelectedProduct,
-                          color: color.name,
-                        }))
-                      }
-                    >
-                      <div
-                        className="circle-color"
-                        style={{ backgroundColor: color.rgb }}
-                      ></div>
-                    </div>
-                  ))}
-              </div>
+              <p className="fw-bold">Color: {newOrder.color}</p>
+              <ColorOptions
+                colors={colors.flat()}
+                selectedColor={newOrder.color}
+                onColorSelect={handleColorSelect}
+              />
 
               <p className="fw-bold">
                 Size: {newOrder.size !== null ? newOrder.size : ""}
               </p>
-              <div className="d-flex mb-3">
-                {sizes.map((size, index) => (
-                  <p
-                    key={index}
-                    className={`size-text ${
-                      newOrder.size === size ? "active" : ""
-                    }`}
-                    onClick={() =>
-                      setNewOrder((prevOrder) => ({
-                        ...prevOrder,
-                        size: size,
-                      }))
-                    }
-                  >
-                    {size}
-                  </p>
-                ))}
-              </div>
+              <SizeOptions
+                sizes={sizes}
+                selectedSize={newOrder.size}
+                onSizeSelect={handleSizeSelect}
+              />
 
               <p className="fw-bold">Quantity: {newOrder.quantity}</p>
               <div className="d-flex mb-3">
                 <p
                   className={"size-text"}
-                  onClick={() => {
-                    if (newOrder.quantity > 0) {
-                      setNewOrder((prevOrder) => ({
-                        ...prevOrder,
-                        quantity: prevOrder.quantity - 1,
-                        price: productInfo.price * prevOrder.quantity,
-                      }));
-                    }
-                  }}
+                  onClick={() => handleQuantityChange(-1)}
                 >
                   -
                 </p>
                 <p className={"size-text"}>{newOrder.quantity}</p>
                 <p
                   className={"size-text"}
-                  onClick={() => {
-                    setNewOrder((prevOrder) => ({
-                      ...prevOrder,
-                      quantity: prevOrder.quantity + 1,
-                    }));
-                    setNewOrder((prevOrder) => ({
-                      ...prevOrder,
-                      price: productInfo.price * newOrder.quantity,
-                    }));
-                  }}
+                  onClick={() => handleQuantityChange(1)}
                 >
                   +
                 </p>
@@ -233,19 +196,11 @@ export const ProductDetails = () => {
 
               <div className="d-flex">
                 <div className="col-9">
-                  <p
-                    className="button-black"
-                    onClick={() => {
-                      const existingCart =
-                        JSON.parse(localStorage.getItem("cart")) || [];
-                      const updatedCart = [...existingCart, newOrder];
-                      localStorage.setItem("cart", JSON.stringify(updatedCart));
-                      actions.getCartFromStorage();
-                    }}
-                  >
+                  <p className="button-black" onClick={handleAddToCart}>
                     ADD TO CART
                   </p>
                 </div>
+
                 <div className="col-2">
                   {/*************** FAVORITE HEART ********************/}
                   {store.user && (
@@ -281,7 +236,23 @@ export const ProductDetails = () => {
                   I agree withTerms & Conditions
                 </h5>
               </div>
-              <p className="button-black blue my-3">BUY</p>
+
+              <p
+                className={`my-3 ${
+                  newOrder.termsPolicy === true
+                    ? "button-blue-dark"
+                    : "button-blue"
+                }`}
+                onClick={() => setShowMessage(true)}
+              >
+                BUY
+              </p>
+              {showMessage && !newOrder.termsPolicy && (
+                <p className="mandatory">*You must accept terms and policy</p>
+              )}
+              {showMessage && newOrder.termsPolicy && (
+                <p>Payment not available yet</p>
+              )}
             </div>
           </div>
         </div>
@@ -290,8 +261,4 @@ export const ProductDetails = () => {
       )}
     </>
   );
-};
-
-ProductDetails.propTypes = {
-  match: PropTypes.object,
 };

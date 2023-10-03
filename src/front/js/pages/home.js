@@ -38,7 +38,7 @@ export const Home = () => {
                 <Link to={"/catalogue/" + item.name} className="zoom-img">
                   <img src={item.img} className="cover-image" />
                   <div className="text-img start-0 end-0 top-0 bottom-0">
-                    <h4>{name}</h4>
+                    <h4 className="white">{name}</h4>
                   </div>
                 </Link>
               </div>
